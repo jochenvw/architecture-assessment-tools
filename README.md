@@ -18,3 +18,9 @@ Curated skills for assessing Azure-based GenAI application design & architecture
 ## Use
 - CLI: skills auto-discovered from `.github/skills/`.
 - VS Code: customizations auto-loaded from `.github/`.
+
+## Skills & Sources
+| Skill | Source |
+|-------|--------|
+| `cloud-solution-architect` | [microsoft/skills](https://github.com/microsoft/skills/tree/main/.github/skills/cloud-solution-architect) |
+| `acquire-codebase-knowledge` | [github/awesome-copilot](https://github.com/github/awesome-copilot/tree/main/skills/acquire-codebase-knowledge) |
