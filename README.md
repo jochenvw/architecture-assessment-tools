@@ -55,7 +55,8 @@ to npm.
 
 #### Global (available in every project)
 
-Copies the skill folders into your personal Copilot skills folder (`~/.copilot/skills`):
+Copies the skill folders into your personal Copilot skills folder (`~/.copilot/skills`) — the
+location Copilot discovers automatically in every project, no settings change required:
 
 ```bash
 npx github:jochenvw/architecture-assessment-tools --global
