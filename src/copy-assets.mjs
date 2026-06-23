@@ -90,6 +90,26 @@ export function countFiles(dir) {
 }
 
 /**
+ * Validate that a name read from an (untrusted) install marker is a plausible
+ * single-segment skill folder name. Rejects path separators, traversal, empty
+ * or hidden names, and anything outside a conservative charset.
+ *
+ * @param {unknown} name
+ * @returns {boolean}
+ */
+export function isValidSkillName(name) {
+  return (
+    typeof name === 'string' &&
+    name.length > 0 &&
+    name.length <= 128 &&
+    name !== '.' &&
+    name !== '..' &&
+    !name.startsWith('.') &&
+    /^[A-Za-z0-9._-]+$/.test(name)
+  );
+}
+
+/**
  * Read the install marker from a skills destination directory.
  *
  * Only a marker that is well-formed AND owned by this package (matching
@@ -97,6 +117,13 @@ export function countFiles(dir) {
  * returns null so the installer never treats someone else's folders as its own
  * (which would let a forged marker bypass collision checks or be deleted by
  * `--clean`).
+ *
+ * The `skills` array is user-editable, so it is treated as untrusted: every
+ * entry must be a valid single-segment name AND must correspond either to a
+ * skill shipped by this package or to an existing folder that actually contains
+ * a `SKILL.md`. This prevents a hand-forged marker from (a) claiming ownership
+ * of unrelated pre-existing folders to bypass collision checks, or (b) listing
+ * arbitrary directory names that `--clean` would then delete.
  *
  * @param {string} destDir – directory that contains skill folders
  * @returns {{ package: string, version?: string, skills: string[] } | null}
@@ -119,7 +146,14 @@ export function readMarker(destDir) {
   ) {
     return null;
   }
-  return parsed;
+  const shipped = new Set(listSkillNames());
+  const skills = parsed.skills.filter(
+    (name) =>
+      isValidSkillName(name) &&
+      (shipped.has(name) ||
+        fs.existsSync(path.join(destDir, name, 'SKILL.md'))),
+  );
+  return { ...parsed, skills };
 }
 
 /**
@@ -146,6 +180,9 @@ export function writeMarker(destDir, version, skills) {
  * Collision safety: if a target skill folder already exists and is NOT recorded
  * in this package's install marker, the install refuses unless `force` is set.
  *
+ * Clean upgrades: when a target folder is going to be (re)written, it is removed
+ * first so files deleted upstream do not linger from a previous install.
+ *
  * @param {string} destDir – absolute directory that will contain skill folders
  * @param {{ force?: boolean }} [opts]
  * @returns {{ copied: number, skills: string[] }}
@@ -165,6 +202,10 @@ export function installSkills(destDir, { force = false } = {}) {
           `\n    and was not installed by ${PACKAGE_NAME}. Re-run with --force to overwrite.\n`,
       );
       process.exit(1);
+    }
+    // Replace the folder wholesale so files removed upstream don't survive.
+    if (fs.existsSync(target)) {
+      fs.rmSync(target, { recursive: true, force: true });
     }
     copyDir(safeJoin(src, name), target);
     copied += countFiles(target);

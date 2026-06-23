@@ -265,7 +265,7 @@ export async function main(options = {}) {
     }
   }
 
-  const { copied, skills } = installSkills(fullDest, { force: true });
+  const { copied, skills } = installSkills(fullDest, { force: options.force });
   writeMarker(fullDest, version, skills);
 
   console.log(
