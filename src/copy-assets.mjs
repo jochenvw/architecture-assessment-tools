@@ -31,7 +31,7 @@ export function safeJoin(base, segment) {
 
 /**
  * List the skill folder names shipped by this package (each folder under
- * `skills/` that contains a SKILL.md).
+ * the source skills directory that contains a SKILL.md).
  *
  * @returns {string[]}
  */

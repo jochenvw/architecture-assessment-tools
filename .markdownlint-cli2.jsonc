@@ -17,6 +17,9 @@
   },
   "ignores": [
     ".copilot/**",
-    "node_modules/**"
+    "node_modules/**",
+    // Vendored third-party skills retain upstream formatting (see README → Source).
+    ".github/skills/acquire-codebase-knowledge/**",
+    ".github/skills/cloud-solution-architect/**"
   ]
 }

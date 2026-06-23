@@ -1,15 +1,15 @@
 {
-  "name": "copilot-skills",
+  "name": "architecture-assessment-tools",
   "version": "1.0.0",
-  "description": "Install standalone GitHub Copilot skills (design-thinking, outcome-hypothesis) into your project or personal Copilot folder",
+  "description": "Install the architecture-assessment-tools Copilot skills into your project or personal Copilot folder",
   "type": "module",
   "bin": {
-    "copilot-skills": "./bin/cli.mjs"
+    "architecture-assessment-tools": "./bin/cli.mjs"
   },
   "files": [
     "bin/",
     "src/",
-    "skills/",
+    ".github/skills/",
     "plugin.json"
   ],
   "scripts": {
@@ -26,8 +26,7 @@
     "vscode",
     "copilot",
     "skills",
-    "design-thinking",
-    "outcome-hypothesis",
+    "architecture",
     "ai",
     "cli"
   ],

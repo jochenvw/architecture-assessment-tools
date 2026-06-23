@@ -1,12 +1,12 @@
 /**
- * Shared constants for the copilot-skills installer.
+ * Shared constants for the architecture-assessment-tools skills installer.
  */
 
 /** Default destination directory (relative to project root) for a local install. */
 export const DEFAULT_DEST = '.copilot/skills';
 
 /** Directory inside this package that holds the distributable skill folders. */
-export const SKILLS_SOURCE_DIR = 'skills';
+export const SKILLS_SOURCE_DIR = '.github/skills';
 
 /**
  * Path segments (relative to the user's home directory) for the personal
@@ -28,7 +28,7 @@ export const SKILLS_SETTING_KEY = 'chat.agentSkillsLocations';
  * which folders this package owns so `--clean` never removes a user's own
  * skills that happen to share a name.
  */
-export const INSTALL_MARKER = '.copilot-skills-installed.json';
+export const INSTALL_MARKER = '.installed-skills.json';
 
 /** Human-readable package identity recorded in the install marker. */
-export const PACKAGE_NAME = 'copilot-skills';
+export const PACKAGE_NAME = 'architecture-assessment-tools';

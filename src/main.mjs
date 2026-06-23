@@ -40,8 +40,8 @@ function renderBanner(version) {
   const dim = useColor ? '\u001b[2m' : '';
   const reset = useColor ? '\u001b[0m' : '';
   return (
-    `\n  ${cyan}${bold}copilot-skills${reset}\n` +
-    `  ${dim}Standalone GitHub Copilot skills installer${reset}\n` +
+    `\n  ${cyan}${bold}architecture-assessment-tools${reset}\n` +
+    `  ${dim}GitHub Copilot skills installer${reset}\n` +
     `  ${dim}v${version}${reset}\n`
   );
 }
@@ -152,11 +152,11 @@ function removeInstall(destDir, label) {
  * @returns {boolean} true if any cleanup happened
  */
 function runCleanup(userSkillsDir, localDest) {
-  console.log('\n  \uD83E\uDDF9 Cleaning previous copilot-skills installs:\n');
+  console.log('\n  \uD83E\uDDF9 Cleaning previous installs from this package:\n');
   const a = removeInstall(userSkillsDir, `${userSkillsDir}/`);
   const b = removeInstall(localDest, `${localDest}/`);
   if (!a && !b) {
-    console.log('  No previous copilot-skills installation found.');
+    console.log('  No previous installation from this package found.');
   }
   return a || b;
 }

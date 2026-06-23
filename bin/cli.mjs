@@ -5,7 +5,7 @@ import { main } from '../src/main.mjs';
 const major = Number(process.versions.node.split('.')[0]);
 if (Number.isFinite(major) && major < 18) {
   console.error(
-    `\n  \u2718 copilot-skills requires Node.js 18 or newer (found ${process.versions.node}).\n`,
+    `\n  \u2718 architecture-assessment-tools requires Node.js 18 or newer (found ${process.versions.node}).\n`,
   );
   process.exit(1);
 }
@@ -14,9 +14,10 @@ const args = process.argv.slice(2);
 
 if (args.includes('--help') || args.includes('-h')) {
   console.log(`
-  Usage: npx copilot-skills [options]
+  Usage: npx github:jochenvw/architecture-assessment-tools [options]
 
-  Installs the standalone Copilot skills (design-thinking, outcome-hypothesis).
+  Installs this repository's Copilot skills into your project or personal
+  Copilot folder.
 
   Options:
     --global           Install into your personal Copilot folder (~/.copilot/skills)
@@ -24,8 +25,8 @@ if (args.includes('--help') || args.includes('-h')) {
     --dest <path>      Destination directory for a local install
     --force            Overwrite existing skill folders without asking
     --no-settings      Skip the .vscode/settings.json update (local install)
-    --clean            Remove previous copilot-skills installs, then install
-    --clean-only       Remove previous copilot-skills installs and exit
+    --clean            Remove previous installs from this package, then install
+    --clean-only       Remove previous installs from this package and exit
     --help, -h         Show this help message
 
   Examples:
