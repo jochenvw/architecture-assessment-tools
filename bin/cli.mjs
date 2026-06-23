@@ -21,7 +21,7 @@ if (args.includes('--help') || args.includes('-h')) {
 
   Options:
     --global           Install into your personal Copilot folder (~/.copilot/skills)
-    --local            Install into this project (default: .copilot/skills)
+    --local            Install into this project (default: .github/skills)
     --dest <path>      Destination directory for a local install
     --force            Overwrite existing skill folders without asking
     --no-settings      Skip the .vscode/settings.json update (local install)

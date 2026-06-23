@@ -3,7 +3,14 @@
  */
 
 /** Default destination directory (relative to project root) for a local install. */
-export const DEFAULT_DEST = '.copilot/skills';
+export const DEFAULT_DEST = '.github/skills';
+
+/**
+ * Workspace-relative destinations that GitHub Copilot (CLI and VS Code)
+ * discovers automatically. Installing here needs no `chat.agentSkillsLocations`
+ * registration, so the installer skips the settings write for these paths.
+ */
+export const AUTO_DISCOVERED_DESTS = ['.github/skills'];
 
 /** Directory inside this package that holds the distributable skill folders. */
 export const SKILLS_SOURCE_DIR = '.github/skills';

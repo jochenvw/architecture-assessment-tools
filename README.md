@@ -63,18 +63,19 @@ npx github:jochenvw/architecture-assessment-tools --global
 
 #### Local (just this project)
 
-Copies the skill folders into the project (default `.copilot/skills`) and adds that path to
-`.vscode/settings.json` under `chat.agentSkillsLocations`:
+Copies the skill folders into the project's `.github/skills` folder, which both the Copilot
+CLI and VS Code discover automatically — no settings change required:
 
 ```bash
 npx github:jochenvw/architecture-assessment-tools --local
 ```
 
-Choose a different destination with `--dest`, or skip the settings update with
-`--no-settings`:
+Choose a different destination with `--dest`. For any location other than `.github/skills`,
+the installer registers that path in `.vscode/settings.json` under `chat.agentSkillsLocations`
+(skip this with `--no-settings`):
 
 ```bash
-npx github:jochenvw/architecture-assessment-tools --local --dest .github/skills
+npx github:jochenvw/architecture-assessment-tools --local --dest .copilot/skills
 ```
 
 > **Global skill names share a flat namespace.** If you already maintain your own skills with
@@ -86,10 +87,10 @@ npx github:jochenvw/architecture-assessment-tools --local --dest .github/skills
 | Flag | Effect |
 | --- | --- |
 | `--global` | Install into `~/.copilot/skills`. |
-| `--local` | Install into the current project (default `.copilot/skills`). |
+| `--local` | Install into the current project (default `.github/skills`). |
 | `--dest <path>` | Destination directory for a local install. |
 | `--force` | Overwrite existing skill folders without asking. |
-| `--no-settings` | Skip the `.vscode/settings.json` update (local install). |
+| `--no-settings` | Skip the `.vscode/settings.json` update (used only for non-default destinations). |
 | `--clean` | Remove previous installs from this package, then install. |
 | `--clean-only` | Remove previous installs from this package and exit. |
 | `--help`, `-h` | Show usage. |
@@ -106,7 +107,7 @@ cleanup only ever removes its own skills:
 npx github:jochenvw/architecture-assessment-tools --clean-only
 
 # Local (point at the folder you installed into)
-npx github:jochenvw/architecture-assessment-tools --clean-only --dest .copilot/skills
+npx github:jochenvw/architecture-assessment-tools --clean-only --dest .github/skills
 ```
 
 ## Repository layout

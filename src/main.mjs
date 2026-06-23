@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import {
+  AUTO_DISCOVERED_DESTS,
   DEFAULT_DEST,
   INSTALL_MARKER,
   PACKAGE_NAME,
@@ -274,7 +275,13 @@ export async function main(options = {}) {
   );
   for (const name of skills) console.log(`    \u2022 ${name}/`);
 
-  if (!options.noSettings) {
+  if (options.noSettings) {
+    console.log('\n  \u2298 Skipped .vscode/settings.json (--no-settings)');
+  } else if (AUTO_DISCOVERED_DESTS.includes(relDest)) {
+    console.log(
+      `\n  \u2022 ${relDest}/ is auto-discovered by Copilot \u2014 no settings change needed`,
+    );
+  } else {
     const { created, added, skipped } = mergeSettings(projectRoot, relDest);
     if (skipped) {
       console.log(
@@ -289,9 +296,7 @@ export async function main(options = {}) {
     } else {
       console.log('\n  \u2022 .vscode/settings.json already points at this location \u2014 unchanged');
     }
-  } else {
-    console.log('\n  \u2298 Skipped .vscode/settings.json (--no-settings)');
   }
 
-  console.log('\n  Done. Reload VS Code so Copilot picks up the new skills location.\n');
+  console.log('\n  Done. Reload VS Code so Copilot picks up the new skills.\n');
 }
