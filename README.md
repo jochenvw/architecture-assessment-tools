@@ -23,10 +23,29 @@ save output rather than assuming any fixed folder structure.
 
 ## Install
 
+There are two ways to install these skills: the native GitHub Copilot CLI plugin
+mechanism, or the bundled `npx` installer.
+
+### GitHub Copilot CLI plugin
+
+This repository is a Copilot plugin (it ships a `plugin.json` manifest), so the Copilot CLI
+can install it directly:
+
+```bash
+copilot plugin install jochenvw/architecture-assessment-tools
+```
+
+Manage it with `copilot plugin list`, `copilot plugin disable copilot-skills`, and
+`copilot plugin uninstall copilot-skills`. You can also enable it declaratively by adding
+`copilot-skills` to the `enabledPlugins` field of `~/.copilot/settings.json` (user level) or
+`.github/copilot/settings.json` (repository level).
+
+### npx installer
+
 The installer is run directly from the repository with `npx` — it does not need to be
 published to npm.
 
-### Global (available in every project)
+#### Global (available in every project)
 
 Copies the skill folders into your personal Copilot skills folder (`~/.copilot/skills`):
 
@@ -34,7 +53,7 @@ Copies the skill folders into your personal Copilot skills folder (`~/.copilot/s
 npx github:jochenvw/architecture-assessment-tools --global
 ```
 
-### Local (just this project)
+#### Local (just this project)
 
 Copies the skill folders into the project (default `.copilot/skills`) and adds that path to
 `.vscode/settings.json` under `chat.agentSkillsLocations`:
@@ -56,7 +75,7 @@ Skip the settings update with `--no-settings`.
 > same names, prefer a **local** install (or use `--force` to overwrite knowingly). The
 > installer refuses to overwrite skill folders it did not create unless you pass `--force`.
 
-### Options
+#### Options
 
 | Flag | Effect |
 | --- | --- |
@@ -102,6 +121,7 @@ cp -r skills/design-thinking skills/outcome-hypothesis ~/.copilot/skills/
 ├── skills/
 │   ├── design-thinking/     # SKILL.md + references/methods/*
 │   └── outcome-hypothesis/  # SKILL.md
+├── plugin.json              # Copilot CLI plugin manifest
 ├── package.json
 └── LICENSE
 ```

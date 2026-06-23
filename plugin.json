@@ -1,0 +1,14 @@
+{
+  "name": "copilot-skills",
+  "description": "Standalone GitHub Copilot skills: design-thinking and outcome-hypothesis.",
+  "version": "1.0.0",
+  "license": "MIT",
+  "repository": "https://github.com/jochenvw/architecture-assessment-tools",
+  "keywords": [
+    "copilot",
+    "skills",
+    "design-thinking",
+    "outcome-hypothesis"
+  ],
+  "skills": "skills/"
+}
