@@ -1,0 +1,34 @@
+{
+  "name": "architecture-assessment-tools",
+  "version": "1.0.0",
+  "description": "Install the architecture-assessment-tools Copilot skills into your project or personal Copilot folder",
+  "type": "module",
+  "bin": {
+    "architecture-assessment-tools": "./bin/cli.mjs"
+  },
+  "files": [
+    "bin/",
+    "src/",
+    ".github/skills/",
+    "plugin.json"
+  ],
+  "scripts": {
+    "lint:md": "npx --yes markdownlint-cli2 \"**/*.md\"",
+    "lint:md:fix": "npx --yes markdownlint-cli2 --fix \"**/*.md\""
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "jsonc-parser": "^3.3.1"
+  },
+  "keywords": [
+    "vscode",
+    "copilot",
+    "skills",
+    "architecture",
+    "ai",
+    "cli"
+  ],
+  "license": "MIT"
+}

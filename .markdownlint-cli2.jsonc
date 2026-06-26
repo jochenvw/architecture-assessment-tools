@@ -1,0 +1,25 @@
+// markdownlint-cli2 configuration
+// https://github.com/DavidAnson/markdownlint-cli2
+{
+  "config": {
+    "line-length": false,
+    "no-inline-html": false,
+    "first-line-h1": false,
+    "no-emphasis-as-heading": false,
+    "no-duplicate-heading": false,
+    "MD032": false,
+    "MD060": false,
+    "MD058": false,
+    "MD056": false,
+    "no-hard-tabs": {
+      "code_blocks": false
+    }
+  },
+  "ignores": [
+    ".copilot/**",
+    "node_modules/**",
+    // Vendored third-party skills retain upstream formatting (see README → Source).
+    ".github/skills/acquire-codebase-knowledge/**",
+    ".github/skills/cloud-solution-architect/**"
+  ]
+}

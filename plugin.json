@@ -1,0 +1,13 @@
+{
+  "name": "architecture-assessment-tools",
+  "description": "Copilot skills for assessing application design and architecture.",
+  "version": "1.0.0",
+  "license": "MIT",
+  "repository": "https://github.com/jochenvw/architecture-assessment-tools",
+  "keywords": [
+    "copilot",
+    "skills",
+    "architecture"
+  ],
+  "skills": ".github/skills/"
+}
