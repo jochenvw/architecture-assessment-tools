@@ -24,6 +24,12 @@ production load>** will require approximately:
 - **<A> RPM** at peak
 - **<B> concurrent in-flight requests**, if latency data is available
 
+**Verdict vs current limits:** <does this fit current quota?> — the recommended **<Y> TPM**
+**<fits within / exceeds>** the current limit of **<current_limit> TPM** for **<model>** in
+**<region>** (free headroom **<free> TPM**). <If it exceeds: by how much, and the action — request a
+quota increase, spread across deployments/regions, or use provisioned/PTU capacity.> _(Omit if current
+quota is unknown — say so.)_
+
 Recommendation: request **<Y> TPM** for **<model>** in **<region>** under **<deployment type>**,
 plus sufficient RPM/concurrency headroom for the stated peak-load pattern.
 
