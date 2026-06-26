@@ -96,7 +96,28 @@ Dominant drivers: model output tokens, query count, always-on infrastructure.
 3. Follow the 10-step estimation procedure (`workflow.md`).
 4. Normalize any billing-derived cost evidence (`cost-normalization.md`).
 5. Obey every rule in `guardrails.md`.
-6. Emit the standard output structure (defined in `workflow.md`).
+6. Emit the standard output structure (defined in `workflow.md`) and **save it as a Markdown
+   document** per the Output Contract below.
+
+## Output Contract (Required)
+
+The deliverable is a **saved, properly formatted Markdown document**, not just an inline reply.
+Before finishing, all of the following must be true:
+
+1. The full report is written to a Markdown file named
+   `cost-estimate-<scope-slug>-<YYYY-MM-DD>.md` in the current working directory (or a path the user
+   specifies). State the saved file path in the final reply.
+2. The document follows the exact top-down structure in `workflow.md` → "Output format":
+   **Bottom line** (governing sentence + scenario table) first, then **Why this number**, **Why this
+   confidence**, **Cost decomposition**, **Assumptions**, **Missing or weak evidence**, **To tighten
+   this estimate**, **After go-live: optimize cost**, and the disclaimer last.
+3. Markdown renders cleanly: a single H1 title, `##` section headings, GitHub-aligned tables, fenced
+   code blocks where used, and no stray HTML or broken table rows.
+4. Every figure is traceable to a measured input or a stated assumption. Any stated load fraction is
+   flagged as **user-asserted** and listed as a primary sensitivity.
+5. The mandatory **"indicative only" disclaimer** is the final block of the document.
+6. The inline chat reply contains the one-sentence bottom line plus the saved file path; the file
+   holds the full report.
 
 ## Sub-files
 

@@ -152,6 +152,10 @@ Write the estimate **top-down (Pyramid Principle, McKinsey style): answer first,
 detail.** The reader must get the conclusion and its key caveat in the first two sentences, before
 any table. Never hide assumptions in prose. Never produce only a point estimate.
 
+> 📄 **Save this report as a Markdown file** (`cost-estimate-<scope-slug>-<YYYY-MM-DD>.md`) per the
+> Output Contract in `SKILL.md`, then surface the bottom line and the saved path in chat. The file is
+> the deliverable; the inline reply is the summary.
+
 Order of the report:
 
 1. **Bottom line** — the governing conclusion sentence + the scenario table.

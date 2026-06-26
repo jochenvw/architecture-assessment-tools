@@ -6,3 +6,7 @@ customer_*/
 
 # Session / local working artifacts
 .copilot/session-state/
+
+# Generated estimate reports (run artifacts — not source)
+cost-estimate-*.md
+token-quota-estimate-*.md
