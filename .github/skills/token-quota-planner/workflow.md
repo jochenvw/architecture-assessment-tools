@@ -33,9 +33,14 @@ order; do not skip the representativeness gate, and never size quota from averag
    quota increments.
 8. **Assemble the quota request pack** (`quota-normalization.md` + `azure-foundry-notes.md` when the
    target platform is Azure/Foundry).
-9. **Emit the report** using `report-template.md` — executive answer first (top-down, Pyramid
-   Principle), assumptions explicit, ending with the mandatory coarse-estimate disclaimer.
-10. **State sensitivity, evidence gaps, and next measurements** so the estimate can be tightened.
+9. **Check headroom against current limits.** When current quota is available, fetch it (on Azure:
+   `az cognitiveservices usage list` + `account deployment list`) and compare the recommended TPM
+   against the current limit and free headroom. State whether production fits, needs re-allocation,
+   needs a quota-increase request, or exceeds the model's regional cap. See the headroom check in
+   `demand-model.md` / `quota-normalization.md`.
+10. **Emit the report** using `report-template.md` — executive answer first (top-down, Pyramid
+    Principle), assumptions explicit, ending with the mandatory coarse-estimate disclaimer.
+11. **State sensitivity, evidence gaps, and next measurements** so the estimate can be tightened.
 
 ## What must always be true of the output
 

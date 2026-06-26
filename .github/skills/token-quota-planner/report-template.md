@@ -73,6 +73,22 @@ plus sufficient RPM/concurrency headroom for the stated peak-load pattern.
 | Business justification | ... |
 | Risk if not approved | ... |
 
+## Quota headroom check
+
+Compare the recommended figure against the current limit (omit if current quota is unknown — say so).
+
+| Metric (per model + SKU + region) | Value (TPM) |
+|---|---:|
+| Current limit | ... |
+| Currently assigned | ... |
+| Free headroom (limit − assigned) | ... |
+| Required (before headroom) | ... |
+| Recommended (after safety multiplier) | ... |
+
+**Verdict:** _fits in current headroom_ / _needs re-allocation within the pool_ / _needs a
+quota-increase request_ / _exceeds the model's regional cap_ — gap of **<N> TPM**. If it exceeds the
+cap: spread across deployments/regions, use provisioned/PTU capacity, or request a higher limit.
+
 ## Confidence and representativeness
 
 Rating: **Low / Medium / High**

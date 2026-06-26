@@ -14,6 +14,7 @@ confident-looking quota request from weak token evidence**.
 | Always separate TPM, RPM, and concurrency | They fail differently |
 | Always identify model, region, and deployment type for platform-specific requests | Quota is scoped |
 | Always distinguish current, assigned, available, and requested quota | Prevents support-request confusion |
+| When current quota is known, compare recommended TPM against the limit and free headroom | An estimate that ignores the current cap is not actionable |
 | Always check whether Foundry deployment usage is isolated or shared | Shared usage contaminates extrapolation |
 | Always check whether telemetry covers the full chain | Missing RAG/agent calls understate demand |
 | Always use peak traffic, not only average traffic | Throttling happens at peaks |

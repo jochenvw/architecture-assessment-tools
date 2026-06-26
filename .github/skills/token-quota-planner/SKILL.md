@@ -71,6 +71,7 @@ skill, multiple **evidence adapters**, one shared engine (representativeness gat
 | "We run Agent Framework outside Foundry and only need App Insights logs." | `telemetry-maturity-path.md` |
 | "How representative is my sample?" | `representativeness.md` |
 | "Do the TPM/RPM/concurrency math" | `demand-model.md` |
+| "Will production exceed my current quota / TPM limits?" | `demand-model.md` + `azure-foundry-notes.md` |
 | "Normalize quota terms (current vs assigned vs available)" | `quota-normalization.md` |
 | "Azure / Foundry specifics for the request pack" | `azure-foundry-notes.md` |
 | "Produce the final report" | `report-template.md` |
@@ -86,7 +87,9 @@ skill, multiple **evidence adapters**, one shared engine (representativeness gat
 3. **Score representativeness** (`representativeness.md`) — sets the safety multiplier, not the base
    demand.
 4. **Build the peak-demand model** (`demand-model.md`) — peak RPM, P95 tokens, fanout, retries,
-   required TPM/RPM/concurrency, then apply the safety multiplier.
+   required TPM/RPM/concurrency, then apply the safety multiplier. **When current quota is available,
+   compare the recommended TPM against the current limit and free headroom** (on Azure: `az
+   cognitiveservices usage list` + `account deployment list`) and state the verdict.
 5. **Emit the report** (`report-template.md`) — executive answer first, with the mandatory
    coarse-estimate disclaimer — and **save it as a Markdown document** per the Output Contract below.
 6. Obey every rule in `guardrails.md`.
@@ -100,9 +103,9 @@ Before finishing, all of the following must be true:
    `token-quota-estimate-<workload-slug>-<YYYY-MM-DD>.md` in the current working directory (or a path
    the user specifies). State the saved file path in the final reply.
 2. The document follows the exact structure in `report-template.md`: **Executive answer** first, then
-   **Basis of estimate**, **Demand model**, **Quota request pack**, **Confidence and
-   representativeness**, **Assumptions**, **Sensitivity**, **Missing or weak evidence**,
-   **Recommended next measurements**, and the disclaimer last.
+   **Basis of estimate**, **Demand model**, **Quota request pack**, **Quota headroom check**,
+   **Confidence and representativeness**, **Assumptions**, **Sensitivity**, **Missing or weak
+   evidence**, **Recommended next measurements**, and the disclaimer last.
 3. Markdown renders cleanly: a single H1 title, `##` section headings, GitHub-aligned tables, fenced
    code blocks where used, and no stray HTML or broken table rows.
 4. TPM, RPM, and concurrency are reported **separately**; any figure resting on missing latency or

@@ -55,3 +55,19 @@ Quota evidence:
 
 > ⚠️ TPM, RPM, and concurrency fail differently — always report them separately. RPM and TPM may be
 > coupled on some platforms; do not assume they are independently tunable.
+
+## Headroom check
+
+When current quota is known, compare the recommended figure against it — an estimate that ignores the
+current limit is not actionable:
+
+```text
+free            = current_limit − currently_assigned
+fits_now        = recommended ≤ free
+needs_increase  = recommended > free
+exceeds_cap     = recommended > current_limit
+```
+
+Record `current limit`, `currently assigned`, `free headroom`, `recommended`, and the **verdict**
+(fits / re-allocate / request increase / exceeds cap, with the TPM gap). On Azure, read these from
+`az cognitiveservices usage list` + `account deployment list` (see `azure-foundry-notes.md`).

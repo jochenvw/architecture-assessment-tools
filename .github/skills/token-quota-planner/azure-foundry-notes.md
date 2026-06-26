@@ -85,6 +85,50 @@ $pm = az monitor metrics list --resource $id --metrics TotalTokens `
 - Pass multiple metrics space-separated: `--metrics InputTokens OutputTokens TotalTokens`.
 - Empty/`$null` totals mean *no data in that bucket* (e.g. an unused account) — guard before summing.
 
+## Reading current quota and headroom (CLI)
+
+Quota planning is only actionable if you compare the **recommended** TPM against the **current limit**
+and its **remaining headroom**. Azure exposes both without any telemetry:
+
+```powershell
+# 1. Per-deployment assigned capacity (sku.capacity). For *Standard/GlobalStandard, capacity is in
+#    THOUSANDS of TPM: capacity 390 = 390,000 TPM.
+az cognitiveservices account deployment list --name <account> -g <rg> -o json |
+  ConvertFrom-Json | Select-Object name,
+    @{n='model';e={$_.properties.model.name}},
+    @{n='sku';e={$_.sku.name}}, @{n='capacity_kTPM';e={$_.sku.capacity}}
+
+# 2. Region/model quota: current (assigned) vs limit, per model + SKU family.
+#    Values are also in THOUSANDS of TPM. Headroom = limit - currentValue.
+$u = az cognitiveservices usage list -l <region> -o json | ConvertFrom-Json
+$u | Where-Object { $_.name.value -eq 'OpenAI.GlobalStandard.<model>' } |
+  Select-Object @{n='quota';e={$_.name.value}}, currentValue, limit,
+    @{n='free_kTPM';e={$_.limit - $_.currentValue}}
+```
+
+> ⚠️ **Units:** both `sku.capacity` and the usage `currentValue`/`limit` are in **thousands of TPM**
+> for `Standard` / `GlobalStandard` / `DataZoneStandard`. Multiply by 1,000 to compare against a
+> recommended TPM figure. A `limit` of `1000` means **1,000,000 TPM**.
+
+> ⚠️ The region/model quota (`usage list`) is a **subscription-wide pool per model + SKU + region** —
+> `currentValue` is the sum already assigned across *all* deployments of that model in the region, not
+> just this account. `account list-usage` can return empty; rely on `usage list` + `deployment list`.
+
+### Headroom verdict
+
+```text
+limit_tpm       = limit_kTPM       × 1000        # subscription/region cap for the model+SKU
+assigned_tpm    = currentValue_kTPM × 1000        # already allocated to deployments
+free_tpm        = limit_tpm − assigned_tpm        # unallocated headroom right now
+
+needs_increase  = recommended_requested_tpm > free_tpm
+exceeds_cap     = recommended_requested_tpm > limit_tpm   # even a fresh quota would need raising
+```
+
+State the verdict explicitly: whether the recommended TPM fits in current free headroom, needs a
+re-allocation, needs a **quota-increase request**, or exceeds the model's regional limit entirely
+(→ spread across deployments/regions, use Provisioned/PTU, or request a limit raise).
+
 ## Azure request-pack fields
 
 Include these in the report when Azure is the target platform:

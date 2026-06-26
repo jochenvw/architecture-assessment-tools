@@ -126,6 +126,24 @@ recommended_requested_tpm =
 
 Round up to sensible quota increments.
 
+## Headroom check (recommended vs current limit)
+
+A recommended TPM is only actionable when compared against the **current limit** and its remaining
+**headroom**. Always perform this comparison when current quota is available (see
+`azure-foundry-notes.md` for how to read it on Azure):
+
+```text
+free_tpm        = current_limit_tpm − currently_assigned_tpm
+
+fits_now        = recommended_requested_tpm ≤ free_tpm
+needs_increase  = recommended_requested_tpm > free_tpm
+exceeds_cap     = recommended_requested_tpm > current_limit_tpm
+```
+
+Report one of: **fits in current headroom** / **needs re-allocation within the pool** / **needs a
+quota-increase request** / **exceeds the model's regional cap** (spread across deployments/regions,
+use provisioned/PTU capacity, or request a higher limit). State the gap in TPM.
+
 ## Required RPM
 
 ```text
