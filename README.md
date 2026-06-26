@@ -12,6 +12,7 @@ demand — no shared setup and no dependencies between skills.
 | `cloud-solution-architect` | Azure-based GenAI / Foundry-centric solution architecture guidance. | [microsoft/skills](https://github.com/microsoft/skills/tree/main/.github/skills/cloud-solution-architect) |
 | `acquire-codebase-knowledge` | Systematically build and document an understanding of an unfamiliar codebase. | [github/awesome-copilot](https://github.com/github/awesome-copilot/tree/main/skills/acquire-codebase-knowledge) |
 | `cost-extrapolator` | Project production workload cost from a small measured PoC, benchmark, or token sample, with representativeness gating and confidence bands. | This repository |
+| `token-quota-planner` | Size production model capacity (TPM / RPM / concurrency) from measured Foundry / Azure OpenAI usage or telemetry, check it against current quota limits, and produce a defensible quota request pack. | This repository |
 | `design-thinking` | Facilitate the full Design Thinking process — a 9-method framework covering empathy-driven discovery, synthesis, ideation, prototyping, and production-scale iteration. | This repository |
 | `outcome-hypothesis` | Run lightweight evidence discovery, then draft and validate a testable outcome hypothesis: what result will change, for whom, by when, and the indicators that prove it. | This repository |
 
@@ -125,6 +126,7 @@ npx github:jochenvw/architecture-assessment-tools --clean-only --dest .github/sk
 
 ## License
 
-The installer and the `design-thinking` and `outcome-hypothesis` skills are released under the
+The installer and the repository-authored skills (`cost-extrapolator`, `token-quota-planner`,
+`design-thinking`, and `outcome-hypothesis`) are released under the
 [MIT License](https://opensource.org/license/mit). Bundled third-party skills (see **Source**
 above) retain their upstream licenses.
