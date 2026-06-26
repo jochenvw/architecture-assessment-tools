@@ -11,6 +11,7 @@ demand — no shared setup and no dependencies between skills.
 |-------|---------|--------|
 | `cloud-solution-architect` | Azure-based GenAI / Foundry-centric solution architecture guidance. | [microsoft/skills](https://github.com/microsoft/skills/tree/main/.github/skills/cloud-solution-architect) |
 | `acquire-codebase-knowledge` | Systematically build and document an understanding of an unfamiliar codebase. | [github/awesome-copilot](https://github.com/github/awesome-copilot/tree/main/skills/acquire-codebase-knowledge) |
+| `cost-extrapolator` | Project production workload cost from a small measured PoC, benchmark, or token sample, with representativeness gating and confidence bands. | This repository |
 | `design-thinking` | Facilitate the full Design Thinking process — a 9-method framework covering empathy-driven discovery, synthesis, ideation, prototyping, and production-scale iteration. | This repository |
 | `outcome-hypothesis` | Run lightweight evidence discovery, then draft and validate a testable outcome hypothesis: what result will change, for whom, by when, and the indicators that prove it. | This repository |
 

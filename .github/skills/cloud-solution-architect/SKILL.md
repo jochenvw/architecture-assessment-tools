@@ -48,6 +48,7 @@ Design well-architected, production-grade cloud systems following Azure Architec
 | **Event-driven** | Pub/sub model, event producers/consumers | Real-time processing, IoT, reactive systems | Event Hubs, Event Grid, Functions |
 | **Big data** | Batch + stream processing pipeline | Analytics, ML pipelines, large-scale data | Synapse, Data Factory, Databricks |
 | **Big compute** | HPC, parallel processing | Simulations, modeling, rendering, genomics | Batch, CycleCloud, HPC VMs |
+| **AI / Agentic (RAG)** | LLM orchestration, retrieval-augmented generation, runtime/business-editable agents | Generative-AI apps, copilots, document evaluation, agentic workflows | AI Foundry, Azure OpenAI, AI Search, Container Apps, API Management (AI gateway) |
 
 ### Selection Criteria
 
@@ -55,6 +56,7 @@ Design well-architected, production-grade cloud systems following Azure Architec
 - **Team autonomy** → Microservices (independent teams), N-tier (single team)
 - **Data volume** → Big data (TB+), others (GB)
 - **Latency requirements** → Event-driven (real-time), Web-Queue-Worker (tolerant)
+- **Generative AI / agents** → AI / Agentic (RAG) when the system orchestrates LLM calls, grounds on retrieval, or defines agents from runtime config/data
 
 ---
 
@@ -153,10 +155,12 @@ For each technology area, evaluate: **requirements → constraints → tradeoffs
 | **Data stores** | SQL Database, Cosmos DB, PostgreSQL, Redis, Table Storage | Consistency model, query patterns, scale |
 | **Messaging** | Service Bus, Event Hubs, Event Grid, Queue Storage | Ordering, throughput, pub/sub vs queue |
 | **Networking** | Front Door, Application Gateway, Load Balancer, Traffic Manager | Global vs regional, L4 vs L7, WAF |
-| **AI services** | Azure OpenAI, AI Search, AI Foundry, Document Intelligence | Model needs, data grounding, orchestration |
+| **AI services** | Azure OpenAI, AI Search, AI Foundry, Document Intelligence | Model needs, data grounding, orchestration, token/TPM quota, evaluation & observability |
+| **AI gateway** | API Management (generative-AI policies), load balancer across deployments | Token-based rate limiting, 429/quota handling, multi-deployment routing, central AI telemetry |
+| **Workload identity** | Managed identity + data-plane RBAC, Key Vault, federated credentials | Prefer keyless managed identity & least-privilege; avoid broad secrets/scopes |
 | **Containers** | Container Apps, AKS, Container Instances | Operational control vs simplicity |
 
-See [Technology Choices Reference](./references/technology-choices.md) for detailed decision trees.
+See [Technology Choices Reference](./references/technology-choices.md) for detailed decision trees. For generative-AI workloads, see [AI & Agentic Workload Reference](./references/ai-workloads.md).
 
 ---
 
@@ -176,8 +180,14 @@ See [Technology Choices Reference](./references/technology-choices.md) for detai
 | **Message encoding** | Schema evolution (Avro/Protobuf), backward/forward compatibility, schema registry |
 | **Monitoring & diagnostics** | Structured logging, distributed tracing (W3C Trace Context), metrics, alerts, dashboards |
 | **Transient fault handling** | Retry with exponential backoff + jitter, circuit breaker, idempotency keys, timeout budgets |
+| **AI token & quota management** | Treat tokens-per-minute (TPM)/requests-per-minute as capacity; honour `Retry-After` on 429; backoff + jitter + circuit breaker; PTU vs pay-as-you-go (or hybrid spillover); multi-deployment load balancing via an AI gateway; trim context, cap max tokens, cache prompts |
+| **AI prompt & config versioning** | Treat prompts/instructions as versioned artifacts; promote code + prompts together through DTAP; review production edits; detect behaviour drift |
+| **AI observability & lineage** | OpenTelemetry GenAI spans; tag runs with code commit, prompt/index/input versions; track token, cost, eval, and guardrail metrics for reproducibility |
+| **AI evaluation** | Offline (golden sets, rubric, LLM-as-judge) + online/continuous evals; do not rely on model self-scoring alone |
 
 See [Best Practices Reference](./references/best-practices.md) for implementation details.
+
+> For generative-AI / agentic workloads, also apply the AI-specific best practices, antipatterns, and review checklist in the [AI & Agentic Workload Reference](./references/ai-workloads.md).
 
 ---
 
@@ -197,6 +207,10 @@ Avoid these common patterns that degrade performance under load:
 | **Noisy Neighbor** | One tenant consuming all shared resources | Bulkhead isolation, per-tenant quotas, throttling |
 | **Retry Storm** | Aggressive retries overwhelming a recovering service | Exponential backoff + jitter, circuit breaker, retry budgets |
 | **Synchronous I/O** | Blocking threads on I/O operations | Async/await, non-blocking I/O, reactive streams |
+| **Token Retry Storm** (AI) | Aggressive retries on 429 deepen model-endpoint throttling and inflate cost | Honour `Retry-After`; backoff + jitter; circuit breaker; retry budget; fallback deployment |
+| **No Evaluations** (AI) | AI quality is asserted, not measured; regressions and drift go unnoticed | Offline + online evals; rubric / LLM-as-judge; bind evals to prompt versions |
+| **Unbounded Vector Store Growth** (AI) | Per-upload stores never cleaned up → quota exhaustion, cost, larger attack surface | TTL/`expires_after`, dedup by checksum, scheduled cleanup |
+| **Prompt-as-Instruction** (AI) | Retrieved/user content trusted as instructions → prompt injection | Fence untrusted content as data only; injection scanning; content safety |
 
 ---
 
@@ -277,6 +291,7 @@ Select relevant patterns from the 44 cloud design patterns based on identified c
 - **Monitoring** — Application Insights, Azure Monitor, Log Analytics
 - **Security** — Network segmentation, encryption at rest/in transit, Key Vault
 - **CI/CD** — GitHub Actions, Azure DevOps Pipelines, infrastructure as code
+- **AI workloads (if applicable)** — token/TPM quota & 429 handling, prompt/config versioning & drift, evaluation (offline + online), AI observability & lineage, least-privilege workload identity, sensitivity-label propagation, prompt-injection guardrails. See [AI & Agentic Workload Reference](./references/ai-workloads.md)
 
 ### Step 6: Validate Against WAF Pillars
 
@@ -309,6 +324,7 @@ Use Architecture Decision Records (ADRs):
 - [Technology Choices Reference](./references/technology-choices.md) — Decision trees for Azure services
 - [Best Practices Reference](./references/best-practices.md) — Implementation guidance
 - [Mission-Critical Reference](./references/mission-critical.md) — High-availability design
+- [AI & Agentic Workload Reference](./references/ai-workloads.md) — Generative-AI & agentic design: GenAIOps, evaluation, observability/lineage, token quota & 429 handling, identity & security model
 
 ---
 

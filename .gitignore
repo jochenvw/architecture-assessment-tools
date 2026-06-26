@@ -1,4 +1,12 @@
 node_modules/
 *.log
 .DS_Store
+
+# --- Customer / confidential material — MUST NOT be pushed to the public repo ---
+customer_case/
+**/customer_case/
+customer_*/
+*customer*.md
+
+# Session / local working artifacts
 .copilot/
