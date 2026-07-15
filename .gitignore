@@ -14,3 +14,21 @@ customer_*/
 # Generated estimate reports (run artifacts — not source)
 cost-estimate-*.md
 token-quota-estimate-*.md
+
+# Generated report deliverables (PDF build artifacts — not source)
+deliverable/
+**/deliverable/
+
+# Typst PNG inspection previews (transient — never committed)
+_preview/
+**/_preview/
+
+# Python bytecode caches (generated)
+__pycache__/
+**/__pycache__/
+*.pyc
+
+# foundry-estate-assessment scanner run artifacts (state DB + reports — not source)
+**/assessment.db
+.github/skills/foundry-estate-assessment/demo/
+

@@ -1,0 +1,208 @@
+{
+  "account": {"tenantId": "fixture-tenant-0001", "user": {"name": "assessor@example.com", "type": "user"}},
+  "version": {"azure-cli": "2.60.0"},
+  "subscriptions": [
+    {"id": "11111111-1111-1111-1111-111111111111", "name": "team-platform-sub", "state": "Enabled"}
+  ],
+  "graph": [
+    {
+      "match": "microsoft.cognitiveservices/accounts",
+      "data": [
+        {
+          "id": "/subscriptions/11111111-1111-1111-1111-111111111111/resourceGroups/team-a-rg/providers/Microsoft.CognitiveServices/accounts/team-a-foundry",
+          "name": "team-a-foundry",
+          "type": "microsoft.cognitiveservices/accounts",
+          "kind": "AIServices",
+          "location": "swedencentral",
+          "tags": {"team": "team-a"},
+          "sku": {"name": "S0"},
+          "properties": {"allowProjectManagement": true, "provisioningState": "Succeeded"},
+          "subscriptionId": "11111111-1111-1111-1111-111111111111",
+          "resourceGroup": "team-a-rg"
+        },
+        {
+          "id": "/subscriptions/11111111-1111-1111-1111-111111111111/resourceGroups/team-b-rg/providers/Microsoft.CognitiveServices/accounts/team-b-foundry",
+          "name": "team-b-foundry",
+          "type": "microsoft.cognitiveservices/accounts",
+          "kind": "AIServices",
+          "location": "swedencentral",
+          "tags": {"team": "team-b"},
+          "sku": {"name": "S0"},
+          "properties": {"associatedWorkspaces": ["/subscriptions/11111111-1111-1111-1111-111111111111/resourceGroups/team-b-rg/providers/Microsoft.MachineLearningServices/workspaces/team-b-hub"], "provisioningState": "Succeeded"},
+          "subscriptionId": "11111111-1111-1111-1111-111111111111",
+          "resourceGroup": "team-b-rg"
+        }
+      ]
+    },
+    {
+      "match": "microsoft.apimanagement/service",
+      "data": [
+        {
+          "id": "/subscriptions/11111111-1111-1111-1111-111111111111/resourceGroups/platform-rg/providers/Microsoft.ApiManagement/service/central-apim",
+          "name": "central-apim",
+          "type": "microsoft.apimanagement/service",
+          "kind": null,
+          "location": "swedencentral",
+          "tags": {"role": "ai-gateway"},
+          "sku": {"name": "StandardV2", "capacity": 1},
+          "properties": {"virtualNetworkType": "External"},
+          "subscriptionId": "11111111-1111-1111-1111-111111111111",
+          "resourceGroup": "platform-rg"
+        }
+      ]
+    }
+  ],
+  "rest": {
+    "/subscriptions/11111111-1111-1111-1111-111111111111/resourceGroups/team-a-rg/providers/Microsoft.CognitiveServices/accounts/team-a-foundry?": {
+      "id": "/subscriptions/11111111-1111-1111-1111-111111111111/resourceGroups/team-a-rg/providers/Microsoft.CognitiveServices/accounts/team-a-foundry",
+      "name": "team-a-foundry",
+      "kind": "AIServices",
+      "location": "swedencentral",
+      "sku": {"name": "S0"},
+      "identity": {"type": "SystemAssigned"},
+      "properties": {
+        "allowProjectManagement": true,
+        "provisioningState": "Succeeded",
+        "publicNetworkAccess": "Disabled",
+        "customSubDomainName": "team-a-foundry",
+        "networkInjections": [{"scenario": "agent", "subnetArmId": "/subscriptions/11111111-1111-1111-1111-111111111111/resourceGroups/team-a-rg/providers/Microsoft.Network/virtualNetworks/team-a-vnet/subnets/agents"}],
+        "privateEndpointConnections": [
+          {"properties": {"privateLinkServiceConnectionState": {"status": "Approved"}}}
+        ]
+      }
+    },
+    "/team-a-foundry/projects?": {
+      "value": [
+        {
+          "id": "/subscriptions/11111111-1111-1111-1111-111111111111/resourceGroups/team-a-rg/providers/Microsoft.CognitiveServices/accounts/team-a-foundry/projects/project-a",
+          "name": "project-a",
+          "properties": {
+            "capabilityHosts": [
+              {"properties": {"capabilityHostKind": "standard-agent", "subnetId": "/subscriptions/11111111-1111-1111-1111-111111111111/resourceGroups/team-a-rg/providers/Microsoft.Network/virtualNetworks/team-a-vnet/subnets/agents"}}
+            ]
+          }
+        }
+      ]
+    },
+    "/team-a-foundry/deployments?": {
+      "value": [
+        {"name": "gpt-5-prod", "sku": {"name": "GlobalStandard", "capacity": 100}, "properties": {"model": {"name": "gpt-5", "version": "2025-01-01", "format": "OpenAI"}, "provisioningState": "Succeeded", "raiPolicyName": "enterprise-policy-v3"}}
+      ]
+    },
+    "/team-a-foundry/connections?": {
+      "value": [
+        {"name": "kv", "properties": {"category": "AzureKeyVault", "authType": "AAD", "target": "/subscriptions/11111111-1111-1111-1111-111111111111/resourceGroups/team-a-rg/providers/Microsoft.KeyVault/vaults/team-a-kv"}},
+        {"name": "cosmos", "properties": {"category": "CosmosDB", "authType": "AAD", "target": "/subscriptions/11111111-1111-1111-1111-111111111111/resourceGroups/team-a-rg/providers/Microsoft.DocumentDB/databaseAccounts/team-a-cosmos"}},
+        {"name": "storage", "properties": {"category": "AzureStorageAccount", "authType": "AAD", "target": "/subscriptions/11111111-1111-1111-1111-111111111111/resourceGroups/team-a-rg/providers/Microsoft.Storage/storageAccounts/teamastorage"}},
+        {"name": "search", "properties": {"category": "CognitiveSearch", "authType": "AAD", "target": "/subscriptions/11111111-1111-1111-1111-111111111111/resourceGroups/team-a-rg/providers/Microsoft.Search/searchServices/team-a-search"}}
+      ]
+    },
+    "/team-a-foundry/projects/project-a/connections?": {"value": []},
+    "/accounts/team-a-foundry/providers/Microsoft.Insights/diagnosticSettings?": {
+      "value": [
+        {"name": "to-team-a-law", "properties": {"workspaceId": "/subscriptions/11111111-1111-1111-1111-111111111111/resourceGroups/team-a-rg/providers/Microsoft.OperationalInsights/workspaces/team-a-law", "logs": [{"enabled": true, "categoryGroup": "allLogs"}]}}
+      ]
+    },
+    "/subscriptions/11111111-1111-1111-1111-111111111111/resourceGroups/team-b-rg/providers/Microsoft.CognitiveServices/accounts/team-b-foundry?": {
+      "id": "/subscriptions/11111111-1111-1111-1111-111111111111/resourceGroups/team-b-rg/providers/Microsoft.CognitiveServices/accounts/team-b-foundry",
+      "name": "team-b-foundry",
+      "kind": "AIServices",
+      "location": "swedencentral",
+      "sku": {"name": "S0"},
+      "properties": {"provisioningState": "Succeeded", "publicNetworkAccess": "Enabled", "associatedWorkspaces": ["/subscriptions/11111111-1111-1111-1111-111111111111/resourceGroups/team-b-rg/providers/Microsoft.MachineLearningServices/workspaces/team-b-hub"], "privateEndpointConnections": []}
+    },
+    "/team-b-foundry/projects?": {"value": []},
+    "/team-b-foundry/deployments?": {"value": [{"name": "gpt-4o", "sku": {"name": "Standard", "capacity": 50}, "properties": {"model": {"name": "gpt-4o", "version": "2024-08-06", "format": "OpenAI"}, "provisioningState": "Succeeded"}}]},
+    "/team-b-foundry/connections?": {
+      "value": [
+        {"name": "shared-search", "properties": {"category": "CognitiveSearch", "authType": "ApiKey", "target": "/subscriptions/11111111-1111-1111-1111-111111111111/resourceGroups/team-a-rg/providers/Microsoft.Search/searchServices/team-a-search"}}
+      ]
+    },
+    "/accounts/team-b-foundry/providers/Microsoft.Insights/diagnosticSettings?": {"value": []},
+    "/vaults/team-a-kv?": {
+      "id": "/subscriptions/11111111-1111-1111-1111-111111111111/resourceGroups/team-a-rg/providers/Microsoft.KeyVault/vaults/team-a-kv",
+      "name": "team-a-kv",
+      "location": "swedencentral",
+      "properties": {
+        "sku": {"name": "standard"},
+        "tenantId": "fixture-tenant-0001",
+        "enableRbacAuthorization": true,
+        "enableSoftDelete": true,
+        "enablePurgeProtection": true,
+        "publicNetworkAccess": "Disabled",
+        "privateEndpointConnections": [{"properties": {"privateLinkServiceConnectionState": {"status": "Approved"}}}],
+        "assessmentFootprint": {"secretCount": 12, "keyCount": 2, "certificateCount": 1, "expiredObjectCount": 0}
+      }
+    },
+    "/databaseAccounts/team-a-cosmos?": {
+      "id": "/subscriptions/11111111-1111-1111-1111-111111111111/resourceGroups/team-a-rg/providers/Microsoft.DocumentDB/databaseAccounts/team-a-cosmos",
+      "name": "team-a-cosmos",
+      "kind": "GlobalDocumentDB",
+      "location": "swedencentral",
+      "properties": {
+        "disableLocalAuth": true,
+        "enableMultipleWriteLocations": false,
+        "consistencyPolicy": {"defaultConsistencyLevel": "Session"},
+        "backupPolicy": {"type": "Continuous"},
+        "publicNetworkAccess": "Disabled",
+        "locations": [{"locationName": "Sweden Central"}, {"locationName": "West Europe"}],
+        "privateEndpointConnections": [{"properties": {"privateLinkServiceConnectionState": {"status": "Approved"}}}],
+        "capabilities": [],
+        "assessmentFootprint": {"databaseCount": 2, "containerCount": 6, "documentCount": 120000, "provisionedRU": 4000, "regionalDataGB": [{"region": "Sweden Central", "value": 42.5}, {"region": "West Europe", "value": 42.5}], "indexGB": 6.0, "metricTimestamp": "2026-07-15T00:00:00Z"}
+      }
+    },
+    "/storageAccounts/teamastorage?": {
+      "id": "/subscriptions/11111111-1111-1111-1111-111111111111/resourceGroups/team-a-rg/providers/Microsoft.Storage/storageAccounts/teamastorage",
+      "name": "teamastorage",
+      "kind": "StorageV2",
+      "location": "swedencentral",
+      "sku": {"name": "Standard_ZRS"},
+      "properties": {
+        "isHnsEnabled": true,
+        "allowSharedKeyAccess": false,
+        "publicNetworkAccess": "Disabled",
+        "privateEndpointConnections": [{"properties": {"privateLinkServiceConnectionState": {"status": "Approved"}}}],
+        "assessmentFootprint": {"containerCount": 8, "blobCount": 15000, "usedCapacityGB": 210.0, "largestContainerGB": 90.0, "metricTimestamp": "2026-07-15T00:00:00Z"}
+      }
+    },
+    "/searchServices/team-a-search?": {
+      "id": "/subscriptions/11111111-1111-1111-1111-111111111111/resourceGroups/team-a-rg/providers/Microsoft.Search/searchServices/team-a-search",
+      "name": "team-a-search",
+      "location": "swedencentral",
+      "sku": {"name": "standard"},
+      "properties": {
+        "replicaCount": 2,
+        "partitionCount": 1,
+        "semanticSearch": "standard",
+        "disableLocalAuth": true,
+        "publicNetworkAccess": "Disabled",
+        "privateEndpointConnections": [{"properties": {"privateLinkServiceConnectionState": {"status": "Approved"}}}],
+        "assessmentFootprint": {"indexCount": 47, "indexerCount": 12, "skillsetCount": 5, "dataSourceCount": 8, "documentCount": 890000, "storageGB": 320.0, "vectorIndexGB": 45.0, "largestIndexGB": 60.0, "metricTimestamp": "2026-07-15T00:00:00Z"}
+      }
+    },
+    "/service/central-apim?": {
+      "id": "/subscriptions/11111111-1111-1111-1111-111111111111/resourceGroups/platform-rg/providers/Microsoft.ApiManagement/service/central-apim",
+      "name": "central-apim",
+      "location": "swedencentral",
+      "sku": {"name": "StandardV2", "capacity": 1},
+      "identity": {"type": "SystemAssigned"},
+      "properties": {
+        "publicNetworkAccess": "Enabled",
+        "virtualNetworkType": "External",
+        "assessmentFootprint": {
+          "generation": "v2",
+          "apimToFoundryAuth": "managed-identity",
+          "backendCentralFoundryIds": ["/subscriptions/11111111-1111-1111-1111-111111111111/resourceGroups/platform-rg/providers/Microsoft.CognitiveServices/accounts/central-foundry"],
+          "exposedFoundryIds": ["/subscriptions/11111111-1111-1111-1111-111111111111/resourceGroups/team-a-rg/providers/Microsoft.CognitiveServices/accounts/team-a-foundry"],
+          "teamScopedRoutes": true,
+          "teamScopedProducts": true,
+          "teamScopedSubscriptions": true,
+          "teamAuthMechanism": "api-key",
+          "apiCount": 6,
+          "productCount": 4,
+          "backendCount": 1
+        }
+      }
+    }
+  }
+}

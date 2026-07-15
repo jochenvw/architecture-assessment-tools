@@ -1,0 +1,454 @@
+metadata:
+  id: standard-foundry-v1
+  version: 1.0.0
+  description: >
+    Initial enterprise standard for team Azure AI Foundry deployments. Defines
+    the expected account, networking, bring-your-own-data, gateway,
+    authentication and observability pattern. This file is the single source of
+    truth for the standard and can be edited, cloned or extended without
+    changing scanner code. Re-run `reevaluate` to apply changes to already
+    collected evidence.
+  status: draft
+
+# ---------------------------------------------------------------------------
+# Parameters: referenced by rules via *_parameter assertions. Edit these to
+# adapt the standard to your organization without touching any rule.
+# ---------------------------------------------------------------------------
+parameters:
+  expected_foundry_kind: AIServices
+  expected_foundry_sku: S0
+  expected_capability_host: standard-agent
+  expected_public_network_access: Disabled
+
+  accepted_apim_generations:
+    - v2
+
+  accepted_team_to_apim_authentication:
+    - api-key
+
+  required_apim_to_foundry_authentication:
+    - managed-identity
+
+  required_data_authentication:
+    - entra-id
+
+  # Populate these with your central platform resource IDs. Empty lists mean
+  # gateway/telemetry centralization rules resolve to UNKNOWN rather than FAIL.
+  central_foundry_resource_ids: []
+  central_apim_resource_ids: []
+  central_log_analytics_resource_ids: []
+  central_application_insights_resource_ids: []
+
+# ---------------------------------------------------------------------------
+# Effort sizing: weights and band thresholds for deterministic migration
+# sizing. Editable without code changes.
+# ---------------------------------------------------------------------------
+effort:
+  weights:
+    classic_hub: 40
+    per_project: 4
+    per_deployment: 1
+    data_gb_per_100: 6
+    per_search_index_10: 3
+    shared_dependency: 8
+    cross_subscription_dependency: 6
+    networking_unknown: 4
+    private_endpoint_missing: 6
+  bands:
+    S: 10
+    M: 30
+    L: 60
+
+# ---------------------------------------------------------------------------
+# Rules. severity is configurable per rule. applies_to lists the resource
+# classifications a rule targets.
+# ---------------------------------------------------------------------------
+rules:
+  # -- Foundry account -----------------------------------------------------
+  - id: FND-ACCOUNT-001
+    title: Foundry account uses the AIServices kind
+    category: foundry-account
+    severity: high
+    applies_to: [foundry-current]
+    evidence:
+      path: foundry.kind
+    assertion:
+      equals_parameter: expected_foundry_kind
+    recommended_investigation: >
+      Confirm the account was created as an Azure AI Services (AIServices) kind
+      account rather than a classic hub or standalone OpenAI account.
+
+  - id: FND-ACCOUNT-002
+    title: Foundry account uses the S0 SKU
+    category: foundry-account
+    severity: medium
+    applies_to: [foundry-current]
+    evidence:
+      path: foundry.sku
+    assertion:
+      equals_parameter: expected_foundry_sku
+
+  - id: FND-PROJECT-001
+    title: Team project uses the standard-agent capability host
+    category: foundry-project
+    severity: high
+    applies_to: [foundry-current]
+    evidence:
+      path: projects.capabilityHostKinds
+    assertion:
+      contains_parameter: expected_capability_host
+    recommended_investigation: >
+      Inspect each project's capability hosts; the standard-agent host is
+      expected for team agent projects.
+
+  - id: FND-PROJECT-002
+    title: The team capability host uses VNet injection
+    category: foundry-project
+    severity: high
+    applies_to: [foundry-current]
+    evidence:
+      path: projects.allVnetInjected
+    assertion:
+      equals: true
+
+  # -- Networking ----------------------------------------------------------
+  - id: FND-NET-001
+    title: Foundry has an approved private endpoint
+    category: networking
+    severity: high
+    applies_to: [foundry-current]
+    evidence:
+      path: networking.foundryPrivateEndpointPresent
+    assertion:
+      equals: true
+
+  - id: FND-NET-002
+    title: Foundry public network access matches the configured standard
+    category: networking
+    severity: high
+    applies_to: [foundry-current]
+    evidence:
+      path: foundry.publicNetworkAccess
+    assertion:
+      equals_parameter: expected_public_network_access
+
+  - id: FND-NET-003
+    title: Foundry private endpoint has required private DNS relationships
+    category: networking
+    severity: medium
+    applies_to: [foundry-current]
+    evidence:
+      path: networking.privateDnsAssociation
+    assertion:
+      equals: connected
+
+  - id: FND-NET-004
+    title: Team network is connected through the expected hub/spoke topology
+    category: networking
+    severity: medium
+    applies_to: [foundry-current]
+    evidence:
+      path: networking.hubSpokePeering
+    assertion:
+      equals: connected
+
+  - id: FND-NET-005
+    title: Relevant hub/spoke peering is connected
+    category: networking
+    severity: medium
+    applies_to: [foundry-current]
+    evidence:
+      path: networking.hubSpokePeering
+    assertion:
+      equals: connected
+
+  - id: FND-NET-006
+    title: Every required data service has a private endpoint
+    category: networking
+    severity: high
+    applies_to: [foundry-current]
+    assertion:
+      all_related_resources_match:
+        relationship_types: [PROJECT_USES_KEYVAULT, PROJECT_USES_COSMOS, PROJECT_USES_STORAGE, PROJECT_USES_SEARCH]
+        path: hasPrivateEndpoint
+        equals: true
+
+  # -- Bring-your-own data -------------------------------------------------
+  - id: FND-DATA-001
+    title: A Key Vault connection is present
+    category: byo-data
+    severity: medium
+    applies_to: [foundry-current]
+    assertion:
+      relationship_exists: [PROJECT_USES_KEYVAULT]
+
+  - id: FND-DATA-002
+    title: A Cosmos DB connection is present
+    category: byo-data
+    severity: medium
+    applies_to: [foundry-current]
+    assertion:
+      relationship_exists: [PROJECT_USES_COSMOS]
+
+  - id: FND-DATA-003
+    title: A Storage connection is present
+    category: byo-data
+    severity: medium
+    applies_to: [foundry-current]
+    assertion:
+      relationship_exists: [PROJECT_USES_STORAGE]
+
+  - id: FND-DATA-004
+    title: An Azure AI Search connection is present
+    category: byo-data
+    severity: medium
+    applies_to: [foundry-current]
+    assertion:
+      relationship_exists: [PROJECT_USES_SEARCH]
+
+  - id: FND-DATA-005
+    title: Key Vault uses team-local RBAC
+    category: byo-data
+    severity: high
+    applies_to: [foundry-current]
+    assertion:
+      all_related_resources_match:
+        relationship_types: [PROJECT_USES_KEYVAULT]
+        path: enableRbacAuthorization
+        equals: true
+    recommended_investigation: >
+      Confirm the vault uses Azure RBAC (not access policies) and that the team
+      identity has scoped access. Missing RBAC evidence returns UNKNOWN.
+
+  - id: FND-DATA-006
+    title: Cosmos DB uses team-local RBAC / Entra-only auth
+    category: byo-data
+    severity: high
+    applies_to: [foundry-current]
+    assertion:
+      all_related_resources_match:
+        relationship_types: [PROJECT_USES_COSMOS]
+        path: disableLocalAuth
+        equals: true
+
+  - id: FND-DATA-007
+    title: Storage uses team-local RBAC (shared key access disabled)
+    category: byo-data
+    severity: high
+    applies_to: [foundry-current]
+    assertion:
+      all_related_resources_match:
+        relationship_types: [PROJECT_USES_STORAGE]
+        path: allowSharedKeyAccess
+        equals: false
+
+  - id: FND-DATA-008
+    title: Azure AI Search uses team-local RBAC / Entra-only auth
+    category: byo-data
+    severity: high
+    applies_to: [foundry-current]
+    assertion:
+      all_related_resources_match:
+        relationship_types: [PROJECT_USES_SEARCH]
+        path: disableLocalAuth
+        equals: true
+
+  - id: FND-DATA-009
+    title: Data connections use Microsoft Entra ID where assessable
+    category: byo-data
+    severity: high
+    applies_to: [foundry-current]
+    evidence:
+      path: connections.dataConnectionAuthEntra
+    assertion:
+      equals: true
+
+  # -- Gateway -------------------------------------------------------------
+  - id: FND-GW-001
+    title: Team Foundry traffic is exposed through an accepted APIM v2 gateway
+    category: gateway
+    severity: high
+    applies_to: [foundry-current]
+    assertion:
+      any_related_resource_matches:
+        relationship_types: [FOUNDRY_EXPOSED_THROUGH_APIM]
+        path: apim.isV2
+        equals: true
+
+  - id: FND-GW-002
+    title: APIM targets an approved central Foundry
+    category: gateway
+    severity: high
+    applies_to: [foundry-current]
+    assertion:
+      any_related_resource_matches:
+        relationship_types: [FOUNDRY_EXPOSED_THROUGH_APIM]
+        path: apim.backendCentralFoundryIds
+        count_greater_than: 0
+
+  - id: FND-GW-003
+    title: APIM routes are team scoped
+    category: gateway
+    severity: medium
+    applies_to: [foundry-current]
+    assertion:
+      any_related_resource_matches:
+        relationship_types: [FOUNDRY_EXPOSED_THROUGH_APIM]
+        path: apim.teamScopedRoutes
+        equals: true
+
+  - id: FND-GW-004
+    title: APIM products are team scoped
+    category: gateway
+    severity: medium
+    applies_to: [foundry-current]
+    assertion:
+      any_related_resource_matches:
+        relationship_types: [FOUNDRY_EXPOSED_THROUGH_APIM]
+        path: apim.teamScopedProducts
+        equals: true
+
+  - id: FND-GW-005
+    title: APIM subscriptions are team scoped
+    category: gateway
+    severity: medium
+    applies_to: [foundry-current]
+    assertion:
+      any_related_resource_matches:
+        relationship_types: [FOUNDRY_EXPOSED_THROUGH_APIM]
+        path: apim.teamScopedSubscriptions
+        equals: true
+
+  - id: FND-GW-006
+    title: Direct team-to-central-Foundry access is absent or explicitly allowed
+    category: gateway
+    severity: medium
+    applies_to: [foundry-current]
+    evidence:
+      path: foundry.directCentralAccessAbsent
+    assertion:
+      exists: true
+    recommended_investigation: >
+      Direct network access from team spokes to the central Foundry cannot be
+      proven from control-plane evidence alone; validate NSG/private endpoint
+      routing. Returns UNKNOWN until confirmed.
+
+  # -- Authentication ------------------------------------------------------
+  - id: FND-AUTH-001
+    title: APIM uses managed identity to authenticate to central Foundry
+    category: authentication
+    severity: high
+    applies_to: [foundry-current]
+    assertion:
+      any_related_resource_matches:
+        relationship_types: [FOUNDRY_EXPOSED_THROUGH_APIM]
+        path: apim.apimToFoundryAuth
+        equals: managed-identity
+    recommended_investigation: >
+      The presence of a managed identity alone is not proof. Confirm APIM
+      backend policy uses the managed identity to call the central Foundry.
+
+  - id: FND-AUTH-002
+    title: Foundry data connections use Microsoft Entra ID
+    category: authentication
+    severity: high
+    applies_to: [foundry-current]
+    evidence:
+      path: connections.dataConnectionAuthEntra
+    assertion:
+      equals: true
+
+  - id: FND-AUTH-003
+    title: Team-to-APIM authentication uses an accepted mechanism
+    category: authentication
+    severity: medium
+    applies_to: [foundry-current]
+    assertion:
+      any_related_resource_matches:
+        relationship_types: [FOUNDRY_EXPOSED_THROUGH_APIM]
+        path: apim.teamAuthMechanism
+        in_parameter: accepted_team_to_apim_authentication
+
+  - id: FND-AUTH-004
+    title: API-key-based team-to-APIM authentication is reported as transitional
+    category: authentication
+    severity: info
+    applies_to: [foundry-current]
+    assertion:
+      any_related_resource_matches:
+        relationship_types: [FOUNDRY_EXPOSED_THROUGH_APIM]
+        path: apim.teamAuthMechanism
+        equals: api-key
+    recommended_investigation: >
+      When PASS, team-to-APIM API-key authentication is present and is recorded
+      as an ACCEPTED TRANSITIONAL PATTERN, not an ideal end state.
+
+  # -- Observability -------------------------------------------------------
+  - id: FND-OBS-001
+    title: Hub services send telemetry to an approved central telemetry stack
+    category: observability
+    severity: medium
+    applies_to: [foundry-current]
+    evidence:
+      path: foundry.hubTelemetryCentralized
+    assertion:
+      exists: true
+    recommended_investigation: >
+      Central telemetry centralization requires the central workspace IDs to be
+      configured in the standard parameters; returns UNKNOWN otherwise.
+
+  - id: FND-OBS-002
+    title: Team services send telemetry to a team telemetry stack
+    category: observability
+    severity: medium
+    applies_to: [foundry-current]
+    evidence:
+      path: observability.workspaces
+    assertion:
+      count_greater_than: 0
+
+  - id: FND-OBS-003
+    title: The team telemetry stack is located in the expected team resource group
+    category: observability
+    severity: low
+    applies_to: [foundry-current]
+    evidence:
+      path: foundry.teamTelemetryInExpectedRg
+    assertion:
+      exists: true
+
+  - id: FND-OBS-004
+    title: Foundry diagnostic settings are configured
+    category: observability
+    severity: medium
+    applies_to: [foundry-current]
+    evidence:
+      path: observability.diagnosticSettingsConfigured
+    assertion:
+      equals: true
+
+  - id: FND-OBS-005
+    title: APIM diagnostic settings are configured
+    category: observability
+    severity: low
+    applies_to: [foundry-current]
+    evidence:
+      path: foundry.apimDiagnosticsConfigured
+    assertion:
+      exists: true
+
+  - id: FND-OBS-006
+    title: Required connected data services have diagnostic settings where supported
+    category: observability
+    severity: low
+    applies_to: [foundry-current]
+    evidence:
+      path: foundry.dataServiceDiagnosticsConfigured
+    assertion:
+      exists: true
+
+# ---------------------------------------------------------------------------
+# Exceptions: make an underlying FAIL an ACCEPTED_EXCEPTION without hiding it.
+# Expired exceptions do not apply.
+# ---------------------------------------------------------------------------
+exceptions: []

@@ -15,6 +15,8 @@ demand — no shared setup and no dependencies between skills.
 | `token-quota-planner` | Size production model capacity (TPM / RPM / concurrency) from measured Foundry / Azure OpenAI usage or telemetry, check it against current quota limits, and produce a defensible quota request pack. | This repository |
 | `design-thinking` | Facilitate the full Design Thinking process — a 9-method framework covering empathy-driven discovery, synthesis, ideation, prototyping, and production-scale iteration. | This repository |
 | `outcome-hypothesis` | Run lightweight evidence discovery, then draft and validate a testable outcome hypothesis: what result will change, for whom, by when, and the indicators that prove it. | This repository |
+| `poc-to-prod` | Turn a proof-of-concept GenAI application review into a polished, McKinsey-style PoC-to-production readiness report and matching PDF, steered by an engagement-notes file that sets emphasis and severity. | This repository |
+| `foundry-estate-assessment` | Assess an Azure AI Foundry estate against a configurable standard using a bundled, resumable, offline-testable Python scanner (Azure CLI + stdlib only): deterministic inventory, evidence collection, PASS/FAIL/UNKNOWN rule evaluation, and migration-effort sizing. | This repository |
 
 `design-thinking` and `outcome-hypothesis` are general-purpose: they ask you where to find
 context and where to save output rather than assuming any fixed folder structure.
