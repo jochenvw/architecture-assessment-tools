@@ -13,6 +13,7 @@ exceptions so collectors can map them to precise task states.
 from __future__ import annotations
 
 import json
+import shutil
 import subprocess
 from dataclasses import dataclass
 from pathlib import Path
@@ -72,7 +73,12 @@ class SubprocessCommandRunner:
     """Runs commands via ``subprocess`` using argument arrays (no shell)."""
 
     def __init__(self, az_path: str = "az") -> None:
-        self._az_path = az_path
+        # On Windows the Azure CLI ships as a batch wrapper (``az.cmd``). With
+        # ``shell=False`` (used below) ``CreateProcess`` does not apply
+        # ``PATHEXT`` resolution, so the bare name ``az`` never resolves. Resolve
+        # the concrete executable up front; ``shutil.which`` is a no-op on
+        # POSIX where ``az`` is already directly executable.
+        self._az_path = shutil.which(az_path) or az_path
 
     def run(self, args: list[str], timeout: Optional[float] = None) -> CommandResult:
         # ``az`` is a batch file on Windows; resolve through the shell resolver

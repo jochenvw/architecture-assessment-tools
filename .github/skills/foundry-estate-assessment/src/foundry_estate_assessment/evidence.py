@@ -34,15 +34,33 @@ def _safe_filename(resource_id: str, collector: str) -> str:
     return f"{slug}__{collector}.json"
 
 
+def _os_path(path: Path) -> str:
+    """Return an OS path string safe for long paths.
+
+    On Windows the classic ``MAX_PATH`` (260 char) limit rejects otherwise-valid
+    absolute paths. Prefixing with the extended-length marker ``\\\\?\\`` lifts
+    that ceiling without a registry change. No-op on POSIX.
+    """
+    if os.name != "nt":
+        return str(path)
+    resolved = os.path.abspath(str(path))
+    if resolved.startswith("\\\\?\\"):
+        return resolved
+    if resolved.startswith("\\\\"):  # UNC share
+        return "\\\\?\\UNC\\" + resolved[2:]
+    return "\\\\?\\" + resolved
+
+
 def atomic_write(path: Path, text: str) -> None:
     """Write text atomically so an interrupt never leaves a partial file."""
     path.parent.mkdir(parents=True, exist_ok=True)
     tmp = path.with_suffix(path.suffix + ".tmp")
-    with tmp.open("w", encoding="utf-8", newline="\n") as handle:
+    tmp_os = _os_path(tmp)
+    with open(tmp_os, "w", encoding="utf-8", newline="\n") as handle:
         handle.write(text)
         handle.flush()
         os.fsync(handle.fileno())
-    tmp.replace(path)
+    os.replace(tmp_os, _os_path(path))
 
 
 class EvidenceStore:
