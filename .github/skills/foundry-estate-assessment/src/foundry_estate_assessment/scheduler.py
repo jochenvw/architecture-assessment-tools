@@ -96,6 +96,11 @@ def classify_exception(exc: Exception) -> tuple[TaskStatus, str, Optional[float]
         return TaskStatus.UNSUPPORTED, "UnsupportedApiError", None
     if isinstance(exc, MalformedResponseError):
         return TaskStatus.RETRYABLE_ERROR, "MalformedResponseError", None
+    if isinstance(exc, OSError):
+        # Local IO/OS failures (e.g. a path exceeding MAX_PATH, permission
+        # denied) are deterministic, not transient: retrying never helps and
+        # would mask the real cause. Fail hard so the error surfaces.
+        return TaskStatus.FAILED, exc.__class__.__name__, None
     return TaskStatus.RETRYABLE_ERROR, exc.__class__.__name__, None
 
 

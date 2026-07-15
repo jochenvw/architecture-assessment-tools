@@ -16,6 +16,8 @@ import _harness  # noqa: F401  (path bootstrap)
 
 from foundry_estate_assessment.azure_cli import SubprocessCommandRunner
 from foundry_estate_assessment.evidence import _os_path, _safe_filename, atomic_write
+from foundry_estate_assessment.models import TaskStatus
+from foundry_estate_assessment.scheduler import classify_exception
 
 
 class TestCliResolution(unittest.TestCase):
@@ -68,6 +70,18 @@ class TestLongPathWrite(unittest.TestCase):
                 os.rmdir(_os_path(cur))
                 cur = cur.parent
             os.rmdir(_os_path(root))
+
+
+class TestErrorClassification(unittest.TestCase):
+    def test_local_os_errors_fail_hard_not_retryable(self):
+        # A local IO failure (e.g. MAX_PATH) is deterministic; retrying it
+        # forever would mask the cause, so it must map to FAILED.
+        status, error_class, retry_after = classify_exception(
+            FileNotFoundError(2, "No such file or directory")
+        )
+        self.assertEqual(status, TaskStatus.FAILED)
+        self.assertEqual(error_class, "FileNotFoundError")
+        self.assertIsNone(retry_after)
 
 
 if __name__ == "__main__":

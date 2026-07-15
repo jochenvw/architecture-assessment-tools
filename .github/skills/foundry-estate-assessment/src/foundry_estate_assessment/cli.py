@@ -307,10 +307,19 @@ def cmd_inventory(args: argparse.Namespace) -> int:
 
 
 def cmd_scan(args: argparse.Namespace, *, new_snapshot: bool = True) -> int:
-    scope = _resolve_scope(args)
     standard = load_standard(Path(args.standard))
     client = _make_client(args)
     db, paths = _open_db(args)
+    # Scope is immutable for the life of an assessment: ``_ensure_run`` never
+    # overwrites the persisted scope. So on resume/refresh (any run that already
+    # exists) reuse the stored scope rather than re-deriving it from argv, which
+    # would otherwise silently fall back to ``all-accessible`` and mislabel the
+    # regenerated reports. Only a brand-new run derives scope from the flags.
+    existing = db.latest_run()
+    if existing is not None:
+        scope = Scope(existing["scope_kind"], tuple(v for v in existing["scope_values"].split(",") if v))
+    else:
+        scope = _resolve_scope(args)
     preflight = _preflight(client, scope)
     assessment_id = _ensure_run(db, args, scope, preflight, standard)
 
