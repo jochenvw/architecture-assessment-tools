@@ -1,6 +1,6 @@
 {
   "name": "architecture-assessment-tools",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Install the architecture-assessment-tools Copilot skills into your project or personal Copilot folder",
   "type": "module",
   "bin": {
