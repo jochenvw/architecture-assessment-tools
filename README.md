@@ -24,136 +24,52 @@ context and where to save output rather than assuming any fixed folder structure
 
 `agent-design-assurance` ships only a generic profile and anonymised examples. Customer-specific
 profiles never live in this repository: keep them outside it and pass them by path
-(`--profiles azure-agent,/path/to/platform.yaml`). `.gitignore` and `.npmignore` act as a backstop, as are discovery outputs (`design-assurance-output/`).
+(`--profiles azure-agent,/path/to/platform.yaml`). `.gitignore` and `.npmignore` act as a backstop,
+and also exclude discovery outputs (`design-assurance-output/`).
 
-## Prereqs
+## Prerequisites
 
-- VS Code with GitHub Copilot, or the GitHub Copilot CLI (`copilot`).
-- [Node.js](https://nodejs.org) **18 or newer** — only needed to run the installer.
-- Some skills need extra tooling. For example, `cloud-solution-architect` expects an Azure
-  subscription with Azure AI Foundry access and the Azure CLI (`az`) authenticated
-  (`az login`).
+| Need | For |
+|---|---|
+| GitHub Copilot CLI (`copilot`) or VS Code with GitHub Copilot | Running the skills |
+| Git | The VS Code / single-skill install |
+| Per-skill tools | Listed in each skill's `README.md` or `SKILL.md`. For example, `agent-design-assurance` needs Python 3.10+ and, optionally, a logged-in Azure CLI (`az`) |
 
-## Use the skills in this repository
+## Install
 
-- CLI: skills are auto-discovered from `.github/skills/`.
-- VS Code: customizations under `.github/` are auto-loaded.
-
-## Install the skills elsewhere
-
-To use these skills in another project or globally, pick the first option that fits:
-
-| You use | Recommended | Needs |
-|---|---|---|
-| GitHub Copilot CLI | [Plugin](#github-copilot-cli-plugin) | Copilot CLI only |
-| VS Code, or only one skill | [Copy with git](#copy-with-git-no-npm) | Git only |
-| Either, and npm is allowed to fetch from GitHub | [npx installer](#npx-installer) | Node.js 18+ |
-
-### GitHub Copilot CLI plugin
-
-This repository ships a `plugin.json` manifest, so the Copilot CLI can install it directly:
+### Copilot CLI (recommended)
 
 ```bash
 copilot plugin install jochenvw/architecture-assessment-tools
 ```
 
-The plugin is named `aztools`, so its skills are grouped under one
-prefix when you type `/`: `/aztools:agent-design-assurance`, `/aztools:cost-extrapolator`,
-`/aztools:token-quota-planner`, and so on.
+Installs all skills as the `aztools` plugin. Update with `copilot plugin update aztools`; remove
+with `copilot plugin uninstall aztools`. If you installed it under its old name, run
+`copilot plugin uninstall architecture-assessment-tools` first.
 
-Manage it with `copilot plugin list`, `copilot plugin update aztools` (pulls the latest from
-`main`), `copilot plugin disable aztools` and `copilot plugin uninstall aztools`. You can also
-enable it declaratively by adding `aztools` to the `enabledPlugins` field of
-`~/.copilot/settings.json` (user level) or `.github/copilot/settings.json` (repository level).
-
-If you installed it before the plugin was renamed to `aztools`, uninstall the old
-`architecture-assessment-tools` plugin and install it again.
-
-### Copy with git (no npm)
-
-Works anywhere Git works. Fetch one skill (or drop the `sparse-checkout` line for all of them):
+### VS Code, or a single skill
 
 ```bash
 git clone --depth 1 --filter=blob:none --sparse https://github.com/jochenvw/architecture-assessment-tools aztools-tmp
-git -C aztools-tmp sparse-checkout set .github/skills/agent-design-assurance
+git -C aztools-tmp sparse-checkout set .github/skills/agent-design-assurance   # omit for all skills
 ```
 
 Copy `aztools-tmp/.github/skills/<skill>` into your project's `.github/skills/` (or
 `~/.copilot/skills/` for every project), then delete `aztools-tmp`. To update, repeat.
 
-### npx installer
+## Call a skill
 
-The installer runs directly from the repository with `npx` — it does not need to be published
-to npm.
+| Where | How |
+|---|---|
+| Copilot CLI, plugin install | Type `/aztools:` to list the skills, e.g. `/aztools:agent-design-assurance` |
+| Copilot CLI, copied skill | `/<skill>`, e.g. `/agent-design-assurance` |
+| VS Code chat | Describe the task; Copilot loads the matching skill from `.github/skills/` |
 
-> **npm 12 and locked-down npm.** npm 12 refuses git-hosted packages by default
-> (`EALLOWGIT`), and some corporate npm mirrors trigger `EALLOWREMOTE`. Allow them for this one
-> command only, without changing your npm configuration:
->
-> ```bash
-> npx --allow-git=all --allow-remote=all github:jochenvw/architecture-assessment-tools --local
-> ```
->
-> If your organisation's policy forbids that, use the [plugin](#github-copilot-cli-plugin) or
-> [copy with git](#copy-with-git-no-npm) instead.
+You can also just describe the task in plain language; Copilot picks the skill from its
+description. Example:
 
-#### Global (available in every project)
-
-Copies the skill folders into your personal Copilot skills folder (`~/.copilot/skills`) — the
-location Copilot discovers automatically in every project, no settings change required:
-
-```bash
-npx github:jochenvw/architecture-assessment-tools --global
-```
-
-#### Local (just this project)
-
-Copies the skill folders into the project's `.github/skills` folder, which both the Copilot
-CLI and VS Code discover automatically — no settings change required:
-
-```bash
-npx github:jochenvw/architecture-assessment-tools --local
-```
-
-Choose a different destination with `--dest`. For any location other than `.github/skills`,
-the installer registers that path in `.vscode/settings.json` under `chat.agentSkillsLocations`
-(skip this with `--no-settings`):
-
-```bash
-npx github:jochenvw/architecture-assessment-tools --local --dest .copilot/skills
-```
-
-> **Global skill names share a flat namespace.** If you already maintain your own skills with
-> the same names, prefer a **local** install (or use `--force` to overwrite knowingly). The
-> installer refuses to overwrite skill folders it did not create unless you pass `--force`.
-
-#### Options
-
-| Flag | Effect |
-| --- | --- |
-| `--global` | Install into `~/.copilot/skills`. |
-| `--local` | Install into the current project (default `.github/skills`). |
-| `--dest <path>` | Destination directory for a local install. |
-| `--force` | Overwrite existing skill folders without asking. |
-| `--no-settings` | Skip the `.vscode/settings.json` update (used only for non-default destinations). |
-| `--clean` | Remove previous installs from this package, then install. |
-| `--clean-only` | Remove previous installs from this package and exit. |
-| `--help`, `-h` | Show usage. |
-
-If you run the installer with no flags, it asks whether to install globally or locally.
-
-### Uninstall
-
-The installer records which folders it created (in an `.installed-skills.json` marker), so
-cleanup only ever removes its own skills:
-
-```bash
-# Global
-npx github:jochenvw/architecture-assessment-tools --clean-only
-
-# Local (point at the folder you installed into)
-npx github:jochenvw/architecture-assessment-tools --clean-only --dest .github/skills
-```
+> /aztools:agent-design-assurance Run against this repository using the azure-agent profile and
+> produce a sanitised discovery package.
 
 ## Repository layout
 
@@ -163,7 +79,6 @@ npx github:jochenvw/architecture-assessment-tools --clean-only --dest .github/sk
 | `.github/prompts/` | VS Code | Reusable prompts (`*.prompt.md`) |
 | `.github/instructions/` | VS Code | Scoped instructions (`*.instructions.md`) |
 | `.github/chatmodes/` | VS Code | Custom chat modes (`*.chatmode.md`) |
-| `bin/`, `src/` | Node | `npx` installer |
 | `plugin.json` | Copilot CLI | Plugin manifest |
 
 ## License

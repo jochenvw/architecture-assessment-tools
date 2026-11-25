@@ -28,7 +28,7 @@ The full layout is in `references/output-package.md`. A synthetic, gate-clean ex
 | Git | Optional; enables revision capture and the repository-unchanged gate |
 | Azure CLI | Optional; only for Azure discovery, already logged in. Never installed by the skill |
 
-Install (details and npm 12 notes in the root `README.md`):
+Install (see the root `README.md`):
 
 ```bash
 copilot plugin install jochenvw/architecture-assessment-tools   # Copilot CLI: /aztools:agent-design-assurance
