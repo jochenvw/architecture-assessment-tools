@@ -38,8 +38,6 @@ budgets, quota requests or commitments. **Third-party:** bundled unchanged from 
 copilot plugin install jochenvw/architecture-assessment-tools
 ```
 
-Update with `copilot plugin update aztools`; remove with `copilot plugin uninstall aztools`.
-
 **VS Code, or a single skill:**
 
 ```bash
@@ -49,6 +47,16 @@ git -C aztools-tmp sparse-checkout set .github/skills/agent-design-assurance   #
 
 Copy `aztools-tmp/.github/skills/<skill>` to your project's `.github/skills/` (or
 `~/.copilot/skills/`), then delete `aztools-tmp`.
+
+## Update or remove
+
+| Installed as | Update | Remove |
+|---|---|---|
+| Plugin | `copilot plugin update aztools` | `copilot plugin uninstall aztools` |
+| Copied skill | Repeat the copy | Delete the skill folder from `.github/skills/` or `~/.copilot/skills/` |
+
+Check what is installed with `copilot plugin list`. To keep the plugin but turn it off, use
+`copilot plugin disable aztools` (and `enable` to turn it back on).
 
 ## Use
 
