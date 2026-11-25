@@ -1,0 +1,10 @@
+{
+"schema_version":"1.0.0",
+"items":[
+{"id":"TECH-PROJECTS-SDK","name":"azure-ai-projects","category":"sdk","vendor":"microsoft","version":"1.0.0","version_source":"requirements.txt","lifecycle":"ga","lifecycle_source":"package index","lifecycle_verified_at":"2025-01-15","usage":"Client for Foundry model calls.","native_vs_custom":"native","evidence_refs":["EV-REQ-SDKS"],"confidence":"high"},
+{"id":"TECH-PIPELINE","name":"Review pipeline","category":"bespoke_component","vendor":"bespoke","version":null,"lifecycle":"not_applicable","usage":"Code-defined orchestration of three model stages.","native_vs_custom":"custom","selection_rationale":"Reduce hosting effort (ADR 0002).","rationale_documented":true,"alternatives_to_investigate":[{"capability":"Foundry Agent Service workflows","lifecycle":"unknown","why":"Managed orchestration with built-in tracing.","trade_offs":"Less control over typed stage outputs."}],"evidence_refs":["EV-ORCH-LOOP","EV-ADR-FRAMEWORK"],"confidence":"high"}
+],
+"external_verification":[
+{"topic":"azure-ai-projects lifecycle","source":"package index release history","verified_at":"2025-01-15"}
+]
+}

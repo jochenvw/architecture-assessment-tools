@@ -1,0 +1,79 @@
+# EXAMPLE workload profile (anonymised). Copy to profiles/<your-workload>.yaml and edit.
+# Briefing claims are context to verify, never evidence of implementation.
+profile:
+  id: example-document-review
+  kind: workload
+  version: 0.1.0
+  title: Example exhaustive document review workload (Contoso claims reviewer)
+  description: >-
+    Illustrative workload profile for an agent that reviews documents exhaustively and
+    verifies stated figures against authoritative sources, with human approval.
+  baseline_status: briefing_unverified
+  provenance: Fictional example written for the skill documentation.
+  criterion_prefix: WRK
+  requires: [azure-agent]
+emphasis:
+  - target: '08'
+    level: critical
+    reason: Correctness and completeness of the review are the primary business requirement.
+  - target: '09'
+    level: high
+    reason: Completeness claims need measured recall, not prompt instructions.
+criteria:
+  - id: WRK-01
+    domain: '08'
+    title: Explicit claim enumeration
+    question: Are all verifiable claims explicitly enumerated before verification, and is the enumeration itself checked?
+    expected_baseline: >-
+      A dedicated extraction stage produces a persisted list of claims; downstream stages
+      reconcile against that list so a skipped claim is detectable.
+    baseline_source: Workload briefing (fictional)
+    related: [FA-03, FA-08]
+    emphasis: critical
+    follow_up_questions:
+      - How would the system or reviewer notice a claim that was never extracted?
+  - id: WRK-02
+    domain: '08'
+    title: Deterministic numeric verification
+    question: Are numeric comparisons (units, periods, rounding) performed in deterministic code rather than by the model?
+    expected_baseline: Model proposes candidate matches; code compares normalised values with explicit tolerances.
+    baseline_source: Workload briefing (fictional)
+    related: [FA-05]
+    emphasis: critical
+  - id: WRK-03
+    domain: '09'
+    title: Stage-level recall measurement
+    question: Is recall measured separately for claim extraction, evidence retrieval and discrepancy detection?
+    expected_baseline: Labelled dataset with per-stage recall and precision; thresholds agreed with the business.
+    baseline_source: Workload briefing (fictional)
+    related: [EG-02, EG-03, KR-15]
+    emphasis: high
+  - id: WRK-04
+    domain: '12'
+    title: Review provenance
+    question: Can each review output be traced to model, prompt versions, source document versions and reviewer decisions?
+    expected_baseline: Each review record stores execution id, model deployment and version, prompt version ids, source versions and approval history.
+    baseline_source: Workload briefing (fictional)
+    related: [LT-10, LT-12]
+briefing:
+  summary: >-
+    Contoso claims reviewer checks marketing documents for factual and numeric accuracy
+    before publication. Reported stack is a Python agent on Container Apps with Azure AI
+    Search and a reviewer web front end.
+  claims:
+    - id: WRK-B01
+      statement: The agent reviews every numeric claim in a document.
+      verify_with: [WRK-01, FA-03, FA-08]
+    - id: WRK-B02
+      statement: Reviewers must approve each report before publication.
+      verify_with: [FA-10, FA-12]
+  focus_areas:
+    - Completeness guarantees
+    - Numeric verification method
+workload_metrics:
+  - name: Claims per document
+    why: Drives model calls per review and the recall denominator.
+    criteria: [BC-08, WRK-01]
+  - name: Cost per completed review
+    why: Unit economics for scale decisions.
+    criteria: [OS-12]

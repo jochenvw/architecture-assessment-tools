@@ -1,0 +1,55 @@
+# EXAMPLE platform profile (anonymised). Copy to profiles/<your-platform>.yaml and edit.
+# Customer-specific profiles in profiles/*.yaml are git-ignored in this public repo.
+profile:
+  id: example-platform
+  kind: platform
+  version: 0.1.0
+  title: Example enterprise AI platform standard (Contoso)
+  description: >-
+    Illustrative platform standard for a private-networked, keyless Azure AI landing zone.
+    Use as a template for a real customer platform profile.
+  baseline_status: briefing_unverified
+  provenance: Fictional example written for the skill documentation.
+  criterion_prefix: PLT
+  requires: [azure-agent]
+emphasis:
+  - target: '04'
+    level: high
+    reason: Platform conformance is a prerequisite for production onboarding.
+criteria:
+  - id: PLT-01
+    domain: '04'
+    title: Private networking for all PaaS dependencies
+    question: >-
+      Do all PaaS dependencies (AI services, search, storage, databases, Key Vault) disable
+      public network access and use private endpoints resolved through central private DNS?
+    expected_baseline: >-
+      Public network access disabled; private endpoints in the workload spoke; private DNS
+      zones linked from the central hub.
+    baseline_source: Example platform standard v0 (fictional)
+    related: [CS-03, WA-02, SG-06]
+    evidence_hints: [IaC networking modules, az network private-endpoint list, publicNetworkAccess properties]
+    follow_up_questions:
+      - Which dependencies are reachable publicly today, and is any exception documented?
+  - id: PLT-02
+    domain: '04'
+    title: Keyless authentication with managed identities
+    question: Is every service-to-service call authenticated with a managed identity and is local (key) auth disabled?
+    expected_baseline: disableLocalAuth true on all AI, search, storage and database resources; no keys in configuration.
+    baseline_source: Example platform standard v0 (fictional)
+    related: [CS-04, SG-02, SG-05]
+    evidence_hints: [credential construction in code, disableLocalAuth, allowSharedKeyAccess]
+  - id: PLT-03
+    domain: '04'
+    title: Diagnostic settings to central Log Analytics
+    question: Do all resources send diagnostic logs and metrics to the platform Log Analytics workspace?
+    expected_baseline: Diagnostic settings present for every resource type that supports them.
+    baseline_source: Example platform standard v0 (fictional)
+    related: [CS-06, OS-01]
+  - id: PLT-04
+    domain: '04'
+    title: Environment separation
+    question: Are development, test and production deployed to separate subscriptions with a promotion pipeline?
+    expected_baseline: One subscription per environment; production deployed only by pipeline.
+    baseline_source: Example platform standard v0 (fictional)
+    related: [CS-07, SE-11]

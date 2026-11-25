@@ -1,0 +1,16 @@
+{
+"schema_version":"1.0.0",
+"entities":[
+{"id":"ENT-USER","type":"user_role","name":"Claims adjuster","purpose":"Uploads a claim summary and reads the review.","environment":"test","perspectives":{"declared":"present","implemented":"unknown","deployed":"unknown","runtime":"unknown"},"evidence_refs":["EV-README-PURPOSE"],"confidence":"medium"},
+{"id":"ENT-APP","type":"application","name":"Review API","purpose":"Receives uploads and runs the review pipeline.","environment":"test","perspectives":{"declared":"present","implemented":"present","deployed":"unknown","runtime":"unknown"},"evidence_refs":["EV-ORCH-LOOP","EV-CONFIG-SETTINGS"],"confidence":"high"},
+{"id":"ENT-PIPE","type":"workflow","name":"Review pipeline","purpose":"Extract, verify, summarise.","environment":"test","perspectives":{"declared":"present","implemented":"present","deployed":"unknown","runtime":"unknown"},"evidence_refs":["EV-ORCH-LOOP"],"confidence":"high","parent":"ENT-APP"},
+{"id":"ENT-MI","type":"identity","name":"Workload identity","purpose":"User-assigned managed identity for the app.","environment":"test","perspectives":{"declared":"present","implemented":"present","deployed":"unknown","runtime":"unknown"},"evidence_refs":["EV-BICEP-MI","EV-APP-CRED"],"confidence":"high"},
+{"id":"ENT-FOUNDRY","type":"azure_resource","name":"Foundry account","purpose":"Hosts model deployments.","environment":"test","perspectives":{"declared":"present","implemented":"present","deployed":"present","runtime":"unknown"},"evidence_refs":["EV-AZ-FOUNDRY-1","EV-REQ-SDKS"],"confidence":"high","azure_alias":"AZ-FOUNDRY-1","azure_type":"Microsoft.CognitiveServices/accounts"},
+{"id":"ENT-SEARCH","type":"search_index","name":"Policy index","purpose":"Reference policy lookups during verification.","environment":"test","perspectives":{"declared":"present","implemented":"unknown","deployed":"present","runtime":"unknown"},"evidence_refs":["EV-AZ-SEARCH-1","EV-BICEP-PE"],"confidence":"medium","azure_alias":"AZ-SEARCH-1","azure_type":"Microsoft.Search/searchServices","unknown_properties":["index schema","chunking","embedding model"]}
+],
+"relationships":[
+{"id":"REL-USER-APP","source":"ENT-USER","target":"ENT-APP","direction":"source_to_target","purpose":"Upload and read review","protocol":"HTTPS","authentication":"unknown","network_path":"unknown","mode":"synchronous","perspectives":{"declared":"present","implemented":"unknown","deployed":"unknown","runtime":"unknown"},"evidence_refs":["EV-README-PURPOSE"],"confidence":"low"},
+{"id":"REL-APP-FOUNDRY","source":"ENT-APP","target":"ENT-FOUNDRY","direction":"source_to_target","purpose":"Model inference per stage","protocol":"HTTPS","authentication":"managed_identity_user","identity":"ENT-MI","network_path":"private_endpoint","mode":"synchronous","perspectives":{"declared":"present","implemented":"present","deployed":"present","runtime":"unknown"},"evidence_refs":["EV-APP-CRED","EV-BICEP-PE","EV-AZ-FOUNDRY-1"],"confidence":"high"},
+{"id":"REL-APP-SEARCH","source":"ENT-APP","target":"ENT-SEARCH","direction":"source_to_target","purpose":"Policy lookup","protocol":"HTTPS","authentication":"unknown","network_path":"public_internet","mode":"synchronous","perspectives":{"declared":"present","implemented":"unknown","deployed":"present","runtime":"unknown"},"evidence_refs":["EV-AZ-SEARCH-1"],"confidence":"medium"}
+]
+}

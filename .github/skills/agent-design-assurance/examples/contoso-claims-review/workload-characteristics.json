@@ -1,0 +1,7 @@
+{
+"schema_version":"1.0.0",
+"characteristics":[
+{"id":"WL-VOLUME","name":"Reviews per week","value":"a few hundred","unit":"reviews/week","value_type":"estimate","environment":"production","source":"team interview","evidence_refs":["EV-INTERVIEW-VOLUME"],"confidence":"low"},
+{"id":"WL-CLAIMS","name":"Claims per document","value":null,"unit":"claims","value_type":"unknown","notes":"Not measured; needed as recall denominator.","evidence_refs":[],"confidence":"none"}
+]
+}

@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "agent-design-assurance/execution-flows.schema.json",
+  "title": "Execution flows",
+  "description": "Ordered agent/workflow execution steps with branches, loops, retries, failure paths and approval points.",
+  "type": "object",
+  "required": ["schema_version", "flows"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {"type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$"},
+    "flows": {"type": "array", "items": {"$ref": "#/$defs/flow"}}
+  },
+  "$defs": {
+    "evidenceRefs": {"type": "array", "items": {"type": "string", "pattern": "^EV-[A-Z0-9][A-Z0-9-]*$"}, "uniqueItems": true},
+    "confidence": {"enum": ["high", "medium", "low", "none"]},
+    "entityRef": {"type": ["string", "null"], "pattern": "^ENT-[A-Z0-9][A-Z0-9-]*$"},
+    "flow": {
+      "type": "object",
+      "required": ["id", "name", "trigger", "description", "steps", "evidence_refs", "confidence"],
+      "additionalProperties": false,
+      "properties": {
+        "id": {"type": "string", "pattern": "^FLOW-[A-Z0-9][A-Z0-9-]*$"},
+        "name": {"type": "string"},
+        "trigger": {"type": "string"},
+        "entry_point": {"$ref": "#/$defs/entityRef"},
+        "description": {"type": "string"},
+        "orchestration": {"enum": ["deterministic", "model_driven", "hybrid", "unknown"]},
+        "steps": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/step"}},
+        "evidence_refs": {"$ref": "#/$defs/evidenceRefs"},
+        "confidence": {"$ref": "#/$defs/confidence"}
+      }
+    },
+    "step": {
+      "type": "object",
+      "required": ["id", "order", "kind", "description", "evidence_refs", "confidence"],
+      "additionalProperties": false,
+      "properties": {
+        "id": {"type": "string", "pattern": "^S\\d+[a-z]?$"},
+        "order": {"type": "integer", "minimum": 1},
+        "kind": {
+          "enum": [
+            "trigger", "action", "model_call", "tool_call", "retrieval", "decision", "branch", "loop", "parallel",
+            "human_approval", "validation", "guardrail", "persist", "output", "error_handler", "end"
+          ]
+        },
+        "actor": {"$ref": "#/$defs/entityRef"},
+        "target": {"$ref": "#/$defs/entityRef"},
+        "description": {"type": "string"},
+        "determinism": {"enum": ["deterministic", "model_driven", "human", "unknown"]},
+        "condition": {"type": ["string", "null"]},
+        "next": {"type": "array", "items": {"type": "string", "pattern": "^S\\d+[a-z]?$"}},
+        "on_failure": {"type": ["string", "null"], "pattern": "^S\\d+[a-z]?$"},
+        "retry": {"type": ["string", "null"]},
+        "loop_bound": {"type": ["string", "null"]},
+        "evidence_refs": {"$ref": "#/$defs/evidenceRefs"},
+        "confidence": {"$ref": "#/$defs/confidence"}
+      }
+    }
+  }
+}

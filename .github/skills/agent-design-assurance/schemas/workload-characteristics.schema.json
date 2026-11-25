@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "agent-design-assurance/workload-characteristics.schema.json",
+  "title": "Workload characteristics",
+  "description": "Workload facts with the value type made explicit: measured, configured limit, business target or estimate.",
+  "type": "object",
+  "required": ["schema_version", "characteristics"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {"type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$"},
+    "characteristics": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "value", "value_type", "evidence_refs", "confidence"],
+        "additionalProperties": false,
+        "properties": {
+          "id": {"type": "string", "pattern": "^WL-[A-Z0-9][A-Z0-9-]*$"},
+          "name": {"type": "string"},
+          "value": {"type": ["string", "number", "null"]},
+          "unit": {"type": ["string", "null"]},
+          "value_type": {"enum": ["measured", "configured_limit", "business_target", "estimate", "briefing", "unknown"]},
+          "period": {"type": ["string", "null"]},
+          "environment": {"enum": ["development", "test", "acceptance", "production", "shared", "unknown", "not_applicable"]},
+          "source": {"type": ["string", "null"]},
+          "notes": {"type": ["string", "null"]},
+          "evidence_refs": {"type": "array", "items": {"type": "string", "pattern": "^EV-[A-Z0-9][A-Z0-9-]*$"}},
+          "confidence": {"enum": ["high", "medium", "low", "none"]}
+        }
+      }
+    }
+  }
+}

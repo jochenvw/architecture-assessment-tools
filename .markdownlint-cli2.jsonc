@@ -20,6 +20,8 @@
     "node_modules/**",
     // Vendored third-party skills retain upstream formatting (see README → Source).
     ".github/skills/acquire-codebase-knowledge/**",
-    ".github/skills/cloud-solution-architect/**"
+    ".github/skills/cloud-solution-architect/**",
+    // Intentionally hostile test fixture (prompt-injection content by design).
+    ".github/skills/agent-design-assurance/tests/fixtures/**"
   ]
 }

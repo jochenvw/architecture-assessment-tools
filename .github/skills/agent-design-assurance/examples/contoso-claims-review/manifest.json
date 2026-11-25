@@ -1,0 +1,43 @@
+{
+"schema_version":"1.0.0",
+"skill":{"name":"agent-design-assurance","version":"1.0.0"},
+"schema_versions":{"architecture.json":"1.0.0","assessment.json":"1.0.0","azure-configuration.json":"1.0.0","design-decisions.json":"1.0.0","discovery-coverage.json":"1.0.0","evidence.json":"1.0.0","execution-flows.json":"1.0.0","manifest.json":"1.0.0","technology-inventory.json":"1.0.0","workload-characteristics.json":"1.0.0"},
+"profiles":[
+{"id":"azure-agent","version":"1.0.0","kind":"generic","baseline_status":"generic_guidance","title":"Generic Azure agent design assurance"},
+{"id":"example-platform","version":"0.1.0","kind":"platform","baseline_status":"briefing_unverified","title":"Example enterprise AI platform standard (Contoso)"},
+{"id":"example-document-review","version":"0.1.0","kind":"workload","baseline_status":"briefing_unverified","title":"Example exhaustive document review workload (Contoso claims reviewer)"}
+],
+"assessment_date":"2026-11-25",
+"repository":{"name":"APP-1","remote":null,"revision":"7a79d5beae9dddb04ac5334fb300a39d860c2c77","branch":"main","working_tree_clean":true,"working_tree_summary":"clean","languages":{"Python":2,"Bicep":1}},
+"discovery_modes":[
+"repository",
+"azure_configuration"
+],
+"environments_inspected":[
+{"name":"test","inspected_via":["repository","azure_configuration"]}
+],
+"azure_scope":{"authorised":true,"authorised_by":"platform owner","cli_available":true,"authenticated":true,"scopes":[{"environment":"test","subscription_alias":"AZ-SUB-1","resource_group_alias":"AZ-RG-1"}],"telemetry_authorised":false,"command_templates":[],"failed_attempts":["rbac: forbidden"]},
+"evidence_sources_inspected":[
+"source code",
+"IaC (Bicep)",
+"dependency manifest",
+"ADRs",
+"prompts",
+"tests",
+"Azure resource configuration (test)",
+"team interview"
+],
+"evidence_sources_unavailable":[
+"Azure RBAC (forbidden)",
+"telemetry (not authorised)",
+"production environment (out of scope)"
+],
+"external_documentation":[],
+"sanitisation":{"performed":true,"performed_at":"2026-11-25T13:52:05Z","tool":"ada.py sanitize + package scan","aliases_applied":1,"secrets_redacted":0,"allowlisted":0,"files_excluded":[],"manual_review_notes":[]},
+"limitations":[
+"Synthetic example: all names, paths and values are fictional.",
+"Production not inspected; deployed evidence covers the test environment only.",
+"Role assignments could not be read."
+],
+"integrity":{"baseline_status_hash":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855","repository_unchanged":true,"checked_at":"2026-11-25T13:52:06Z"}
+}

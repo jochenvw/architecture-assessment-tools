@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "agent-design-assurance/technology-inventory.schema.json",
+  "title": "Technology inventory",
+  "description": "Technologies, versions and lifecycle status at discovery time. Input for a separate roadmap-alignment exercise; contains no roadmap content.",
+  "type": "object",
+  "required": ["schema_version", "items", "external_verification"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {"type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$"},
+    "items": {"type": "array", "items": {"$ref": "#/$defs/item"}},
+    "external_verification": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["topic", "source", "verified_at"],
+        "additionalProperties": false,
+        "properties": {
+          "topic": {"type": "string"},
+          "source": {"type": "string"},
+          "verified_at": {"type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}"}
+        }
+      }
+    }
+  },
+  "$defs": {
+    "evidenceRefs": {"type": "array", "items": {"type": "string", "pattern": "^EV-[A-Z0-9][A-Z0-9-]*$"}, "uniqueItems": true},
+    "item": {
+      "type": "object",
+      "required": ["id", "name", "category", "vendor", "version", "lifecycle", "usage", "native_vs_custom", "evidence_refs", "confidence"],
+      "additionalProperties": false,
+      "properties": {
+        "id": {"type": "string", "pattern": "^TECH-[A-Z0-9][A-Z0-9-]*$"},
+        "name": {"type": "string"},
+        "category": {
+          "enum": [
+            "azure_service", "foundry_capability", "agent_framework", "sdk", "model", "library", "runtime",
+            "language", "iac_tool", "ci_cd", "observability", "evaluation", "guardrail", "data_platform",
+            "third_party_service", "bespoke_component", "other"
+          ]
+        },
+        "vendor": {"enum": ["microsoft", "third_party", "open_source", "bespoke", "unknown"]},
+        "version": {"type": ["string", "null"]},
+        "version_source": {"type": ["string", "null"]},
+        "lifecycle": {"enum": ["ga", "preview", "deprecated", "retired", "unknown", "not_applicable"]},
+        "lifecycle_source": {"type": ["string", "null"]},
+        "lifecycle_verified_at": {"type": ["string", "null"]},
+        "usage": {"type": "string"},
+        "native_vs_custom": {"enum": ["native", "custom", "hybrid", "not_applicable", "unknown"]},
+        "selection_rationale": {"type": ["string", "null"]},
+        "rationale_documented": {"type": "boolean"},
+        "known_limitations": {"type": "array", "items": {"type": "string"}},
+        "workarounds": {"type": "array", "items": {"type": "string"}},
+        "alternatives_to_investigate": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["capability", "why", "trade_offs"],
+            "additionalProperties": false,
+            "properties": {
+              "capability": {"type": "string"},
+              "lifecycle": {"enum": ["ga", "preview", "unknown"]},
+              "why": {"type": "string"},
+              "trade_offs": {"type": "string"}
+            }
+          }
+        },
+        "evidence_refs": {"$ref": "#/$defs/evidenceRefs"},
+        "confidence": {"enum": ["high", "medium", "low", "none"]}
+      }
+    }
+  }
+}

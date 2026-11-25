@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "agent-design-assurance/design-decisions.schema.json",
+  "title": "Design decisions",
+  "description": "Architectural decisions found or inferred. Rationale is never invented: undocumented rationale is marked as such.",
+  "type": "object",
+  "required": ["schema_version", "decisions"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {"type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$"},
+    "decisions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "title", "decision", "status", "rationale_documented", "evidence_refs", "criteria"],
+        "additionalProperties": false,
+        "properties": {
+          "id": {"type": "string", "pattern": "^DD-\\d{3,}$"},
+          "title": {"type": "string"},
+          "decision": {"type": "string"},
+          "context": {"type": ["string", "null"]},
+          "status": {"enum": ["documented", "inferred_from_implementation", "conflicting"]},
+          "rationale_documented": {"type": "boolean"},
+          "rationale": {"type": ["string", "null"]},
+          "alternatives_considered": {"type": "array", "items": {"type": "string"}},
+          "consequences": {"type": "array", "items": {"type": "string"}},
+          "preliminary_view": {"enum": ["retain", "improve", "reconsider", "investigate", null]},
+          "evidence_refs": {"type": "array", "items": {"type": "string", "pattern": "^EV-[A-Z0-9][A-Z0-9-]*$"}},
+          "criteria": {"type": "array", "items": {"type": "string", "pattern": "^[A-Z]{2,4}-\\d{2,3}$"}}
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,121 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "agent-design-assurance/manifest.schema.json",
+  "title": "Discovery package manifest",
+  "type": "object",
+  "required": [
+    "schema_version", "skill", "schema_versions", "profiles", "assessment_date", "repository", "discovery_modes",
+    "environments_inspected", "azure_scope", "evidence_sources_inspected", "evidence_sources_unavailable",
+    "external_documentation", "sanitisation", "limitations", "integrity"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {"type": "string"},
+    "skill": {
+      "type": "object",
+      "required": ["name", "version"],
+      "additionalProperties": false,
+      "properties": {"name": {"const": "agent-design-assurance"}, "version": {"type": "string"}}
+    },
+    "schema_versions": {"type": "object", "additionalProperties": {"type": "string"}},
+    "profiles": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "version", "kind", "baseline_status"],
+        "additionalProperties": false,
+        "properties": {
+          "id": {"type": "string"},
+          "version": {"type": "string"},
+          "kind": {"enum": ["generic", "platform", "workload"]},
+          "baseline_status": {"enum": ["generic_guidance", "briefing_unverified", "verified_policy"]},
+          "title": {"type": "string"}
+        }
+      }
+    },
+    "assessment_date": {"type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}"},
+    "repository": {
+      "type": "object",
+      "required": ["name", "revision", "branch", "working_tree_clean"],
+      "additionalProperties": false,
+      "properties": {
+        "name": {"type": "string"},
+        "remote": {"type": ["string", "null"]},
+        "revision": {"type": ["string", "null"]},
+        "branch": {"type": ["string", "null"]},
+        "working_tree_clean": {"type": ["boolean", "null"]},
+        "working_tree_summary": {"type": ["string", "null"]},
+        "languages": {"type": "object", "additionalProperties": {"type": "integer"}}
+      }
+    },
+    "discovery_modes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"enum": ["repository", "azure_configuration", "azure_telemetry"]}
+    },
+    "environments_inspected": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "inspected_via"],
+        "additionalProperties": false,
+        "properties": {
+          "name": {"enum": ["development", "test", "acceptance", "production", "shared", "unknown"]},
+          "inspected_via": {"type": "array", "items": {"enum": ["repository", "azure_configuration", "azure_telemetry"]}},
+          "notes": {"type": ["string", "null"]}
+        }
+      }
+    },
+    "azure_scope": {
+      "type": "object",
+      "required": ["authorised"],
+      "additionalProperties": false,
+      "properties": {
+        "authorised": {"type": "boolean"},
+        "authorised_by": {"type": ["string", "null"]},
+        "cli_available": {"type": ["boolean", "null"]},
+        "authenticated": {"type": ["boolean", "null"]},
+        "scopes": {"type": "array", "items": {"type": "object"}},
+        "telemetry_authorised": {"type": "boolean"},
+        "command_templates": {"type": "array", "items": {"type": "string"}},
+        "failed_attempts": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "evidence_sources_inspected": {"type": "array", "items": {"type": "string"}},
+    "evidence_sources_unavailable": {"type": "array", "items": {"type": "string"}},
+    "external_documentation": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["topic", "source", "verified_at"],
+        "properties": {"topic": {"type": "string"}, "source": {"type": "string"}, "verified_at": {"type": "string"}}
+      }
+    },
+    "sanitisation": {
+      "type": "object",
+      "required": ["performed"],
+      "additionalProperties": false,
+      "properties": {
+        "performed": {"type": "boolean"},
+        "performed_at": {"type": ["string", "null"]},
+        "tool": {"type": ["string", "null"]},
+        "aliases_applied": {"type": "integer"},
+        "secrets_redacted": {"type": "integer"},
+        "allowlisted": {"type": "integer"},
+        "files_excluded": {"type": "array", "items": {"type": "string"}},
+        "manual_review_notes": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "limitations": {"type": "array", "items": {"type": "string"}},
+    "integrity": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "baseline_status_hash": {"type": ["string", "null"]},
+        "repository_unchanged": {"type": ["boolean", "null"]},
+        "checked_at": {"type": ["string", "null"]}
+      }
+    }
+  }
+}

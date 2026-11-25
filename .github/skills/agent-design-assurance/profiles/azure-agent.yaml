@@ -1,0 +1,24 @@
+# Generic Azure agent design assurance profile.
+# Always include this profile. It selects all twelve domain catalogues in
+# references/domains/ and adds no criteria of its own.
+profile:
+  id: azure-agent
+  kind: generic
+  version: 1.0.0
+  title: Generic Azure agent design assurance
+  description: >-
+    Baseline discovery for any Azure-hosted agentic AI application. Uses every generic
+    criterion from the twelve domain catalogues. Platform and workload profiles add
+    their own criteria and emphasis on top.
+  baseline_status: generic_guidance
+  provenance: >-
+    Agent Skill catalogue (references/domains). Baselines reflect generally accepted
+    engineering practice and the Azure Well-Architected Framework, not customer policy.
+include_domains: ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12']
+emphasis:
+  - target: '06'
+    level: high
+    reason: Agent execution architecture is the core of the review.
+  - target: '09'
+    level: high
+    reason: Evaluation and guardrail maturity determine how much any behaviour can be trusted.

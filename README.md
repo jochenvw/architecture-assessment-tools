@@ -17,9 +17,14 @@ demand — no shared setup and no dependencies between skills.
 | `outcome-hypothesis` | Run lightweight evidence discovery, then draft and validate a testable outcome hypothesis: what result will change, for whom, by when, and the indicators that prove it. | This repository |
 | `poc-to-prod` | Turn a proof-of-concept GenAI application review into a polished, McKinsey-style PoC-to-production readiness report and matching PDF, steered by an engagement-notes file that sets emphasis and severity. | This repository |
 | `foundry-estate-assessment` | Assess an Azure AI Foundry estate against a configurable standard using a bundled, resumable, offline-testable Python scanner (Azure CLI + stdlib only): deterministic inventory, evidence collection, PASS/FAIL/UNKNOWN rule evaluation, and migration-effort sizing. | This repository |
+| `agent-design-assurance` | Read-only, evidence-first discovery of an Azure agentic AI application (repository plus optional, explicitly authorised Azure configuration) across 12 domains, using composable generic, platform and workload profiles. Produces a sanitised, portable evidence package (architecture graph, execution flows, evidence, preliminary assessment, open questions) for independent design assurance review. | This repository |
 
 `design-thinking` and `outcome-hypothesis` are general-purpose: they ask you where to find
 context and where to save output rather than assuming any fixed folder structure.
+
+`agent-design-assurance` ships only a generic profile and anonymised examples. Customer-specific
+profiles never live in this repository: keep them outside it and pass them by path
+(`--profiles azure-agent,/path/to/platform.yaml`). `.gitignore` and `.npmignore` act as a backstop, as are discovery outputs (`design-assurance-output/`).
 
 ## Prereqs
 
@@ -129,6 +134,6 @@ npx github:jochenvw/architecture-assessment-tools --clean-only --dest .github/sk
 ## License
 
 The installer and the repository-authored skills (`cost-extrapolator`, `token-quota-planner`,
-`design-thinking`, and `outcome-hypothesis`) are released under the
+`design-thinking`, `outcome-hypothesis`, and `agent-design-assurance`) are released under the
 [MIT License](https://opensource.org/license/mit). Bundled third-party skills (see **Source**
 above) retain their upstream licenses.

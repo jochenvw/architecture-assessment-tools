@@ -1,0 +1,87 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "agent-design-assurance/architecture.schema.json",
+  "title": "Architecture graph",
+  "description": "Entities and relationships sufficient to render infrastructure, logical, network, identity, data-flow, agent, deployment, observability and lifecycle diagrams.",
+  "type": "object",
+  "required": ["schema_version", "entities", "relationships"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {"type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$"},
+    "entities": {"type": "array", "items": {"$ref": "#/$defs/entity"}},
+    "relationships": {"type": "array", "items": {"$ref": "#/$defs/relationship"}}
+  },
+  "$defs": {
+    "evidenceRefs": {"type": "array", "items": {"type": "string", "pattern": "^EV-[A-Z0-9][A-Z0-9-]*$"}, "uniqueItems": true},
+    "confidence": {"enum": ["high", "medium", "low", "none"]},
+    "presence": {"enum": ["present", "absent", "conflicting", "unknown", "not_applicable"]},
+    "perspectives": {
+      "type": "object",
+      "required": ["declared", "implemented", "deployed", "runtime"],
+      "additionalProperties": false,
+      "properties": {
+        "declared": {"$ref": "#/$defs/presence"},
+        "implemented": {"$ref": "#/$defs/presence"},
+        "deployed": {"$ref": "#/$defs/presence"},
+        "runtime": {"$ref": "#/$defs/presence"}
+      }
+    },
+    "entity": {
+      "type": "object",
+      "required": ["id", "type", "name", "purpose", "environment", "perspectives", "evidence_refs", "confidence"],
+      "additionalProperties": false,
+      "properties": {
+        "id": {"type": "string", "pattern": "^ENT-[A-Z0-9][A-Z0-9-]*$"},
+        "type": {
+          "enum": [
+            "azure_resource", "application", "service", "agent", "workflow", "model", "model_deployment", "tool",
+            "mcp_server", "knowledge_base", "search_index", "data_store", "source_system", "identity",
+            "virtual_network", "subnet", "private_endpoint", "private_dns_zone", "firewall", "gateway",
+            "external_system", "user_role", "human_approval_step", "telemetry_destination", "pipeline",
+            "ci_cd", "environment", "prompt_store", "guardrail", "other"
+          ]
+        },
+        "name": {"type": "string", "minLength": 1},
+        "azure_alias": {"type": ["string", "null"], "pattern": "^AZ-[A-Z0-9-]+$"},
+        "azure_type": {"type": ["string", "null"]},
+        "purpose": {"type": "string"},
+        "environment": {"enum": ["development", "test", "acceptance", "production", "shared", "all", "unknown", "not_applicable"]},
+        "region": {"type": ["string", "null"]},
+        "parent": {"type": ["string", "null"], "pattern": "^ENT-[A-Z0-9][A-Z0-9-]*$"},
+        "properties": {"type": "object"},
+        "unknown_properties": {"type": "array", "items": {"type": "string"}},
+        "perspectives": {"$ref": "#/$defs/perspectives"},
+        "evidence_refs": {"$ref": "#/$defs/evidenceRefs"},
+        "confidence": {"$ref": "#/$defs/confidence"}
+      }
+    },
+    "relationship": {
+      "type": "object",
+      "required": ["id", "source", "target", "direction", "purpose", "protocol", "authentication", "network_path", "mode", "perspectives", "evidence_refs", "confidence"],
+      "additionalProperties": false,
+      "properties": {
+        "id": {"type": "string", "pattern": "^REL-[A-Z0-9][A-Z0-9-]*$"},
+        "source": {"type": "string", "pattern": "^ENT-[A-Z0-9][A-Z0-9-]*$"},
+        "target": {"type": "string", "pattern": "^ENT-[A-Z0-9][A-Z0-9-]*$"},
+        "direction": {"enum": ["source_to_target", "bidirectional"]},
+        "purpose": {"type": "string"},
+        "protocol": {"type": "string"},
+        "authentication": {
+          "enum": [
+            "managed_identity_system", "managed_identity_user", "entra_user_delegated", "on_behalf_of",
+            "service_principal_secret", "service_principal_certificate", "api_key", "connection_string", "sas",
+            "anonymous", "in_process", "other", "unknown", "not_applicable"
+          ]
+        },
+        "identity": {"type": ["string", "null"], "pattern": "^ENT-[A-Z0-9][A-Z0-9-]*$"},
+        "network_path": {"enum": ["private_endpoint", "vnet_integration", "service_endpoint", "public_restricted", "public_internet", "in_process", "other", "unknown", "not_applicable"]},
+        "data_exchanged": {"type": ["string", "null"]},
+        "data_classification": {"type": ["string", "null"]},
+        "mode": {"enum": ["synchronous", "asynchronous", "batch", "event_driven", "unknown"]},
+        "perspectives": {"$ref": "#/$defs/perspectives"},
+        "evidence_refs": {"$ref": "#/$defs/evidenceRefs"},
+        "confidence": {"$ref": "#/$defs/confidence"}
+      }
+    }
+  }
+}

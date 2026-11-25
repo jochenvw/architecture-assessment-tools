@@ -1,0 +1,7 @@
+{
+"schema_version":"1.0.0",
+"decisions":[
+{"id":"DD-001","title":"Bespoke pipeline over Foundry SDK","decision":"Code-defined three-stage pipeline calling Foundry models.","status":"documented","rationale_documented":true,"rationale":"Reduce hosting effort.","alternatives_considered":["Bespoke agent loop","Hosted agent"],"preliminary_view":"retain","evidence_refs":["EV-ADR-FRAMEWORK","EV-ORCH-LOOP"],"criteria":["MT-04","AE-04"]},
+{"id":"DD-002","title":"Public AI Search endpoint","decision":"Search service deployed with public network access.","status":"inferred_from_implementation","rationale_documented":false,"rationale":null,"preliminary_view":"investigate","evidence_refs":["EV-AZ-SEARCH-1"],"criteria":["PLT-01"]}
+]
+}

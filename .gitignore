@@ -32,3 +32,11 @@ __pycache__/
 **/assessment.db
 .github/skills/foundry-estate-assessment/demo/
 
+
+# agent-design-assurance: customer-specific profiles stay local (public repo).
+# Ship only generic + anonymised example profiles.
+.github/skills/agent-design-assurance/profiles/*.yaml
+!.github/skills/agent-design-assurance/profiles/azure-agent.yaml
+# Discovery output packages (run artifacts, may contain customer architecture)
+design-assurance-output/
+*-design-assurance-*.zip

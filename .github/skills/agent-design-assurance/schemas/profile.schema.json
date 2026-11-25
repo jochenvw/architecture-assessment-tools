@@ -1,0 +1,94 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "agent-design-assurance/profile.schema.json",
+  "title": "Assessment profile",
+  "description": "Generic, platform (customer standard) or workload profile. Profiles are composable and independently editable.",
+  "type": "object",
+  "required": ["profile"],
+  "additionalProperties": false,
+  "properties": {
+    "profile": {
+      "type": "object",
+      "required": ["id", "kind", "version", "title", "description", "baseline_status"],
+      "additionalProperties": false,
+      "properties": {
+        "id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$"},
+        "kind": {"enum": ["generic", "platform", "workload"]},
+        "version": {"type": "string"},
+        "title": {"type": "string"},
+        "description": {"type": "string"},
+        "baseline_status": {"enum": ["generic_guidance", "briefing_unverified", "verified_policy"]},
+        "provenance": {"type": ["string", "null"]},
+        "criterion_prefix": {"type": "string", "pattern": "^[A-Z]{2,4}$"},
+        "requires": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "include_domains": {
+      "type": "array",
+      "items": {"type": "string", "pattern": "^(0[1-9]|1[0-2])$"}
+    },
+    "emphasis": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["target", "level", "reason"],
+        "additionalProperties": false,
+        "properties": {
+          "target": {"type": "string", "pattern": "^((0[1-9]|1[0-2])|[A-Z]{2,4}-\\d{2,3})$"},
+          "level": {"enum": ["standard", "high", "critical"]},
+          "reason": {"type": "string"}
+        }
+      }
+    },
+    "criteria": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "domain", "title", "question", "expected_baseline"],
+        "additionalProperties": false,
+        "properties": {
+          "id": {"type": "string", "pattern": "^[A-Z]{2,4}-\\d{2,3}$"},
+          "domain": {"type": "string", "pattern": "^(0[1-9]|1[0-2])$"},
+          "title": {"type": "string"},
+          "question": {"type": "string"},
+          "expected_baseline": {"type": "string"},
+          "baseline_source": {"type": ["string", "null"]},
+          "related": {"type": "array", "items": {"type": "string"}},
+          "evidence_hints": {"type": "array", "items": {"type": "string"}},
+          "follow_up_questions": {"type": "array", "items": {"type": "string"}},
+          "emphasis": {"enum": ["standard", "high", "critical"]}
+        }
+      }
+    },
+    "briefing": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "summary": {"type": "string"},
+        "claims": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["id", "statement", "verify_with"],
+            "additionalProperties": false,
+            "properties": {
+              "id": {"type": "string", "pattern": "^[A-Z]{2,4}-B\\d{2}$"},
+              "statement": {"type": "string"},
+              "verify_with": {"type": "array", "items": {"type": "string"}}
+            }
+          }
+        },
+        "focus_areas": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "workload_metrics": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "why"],
+        "additionalProperties": false,
+        "properties": {"name": {"type": "string"}, "why": {"type": "string"}, "criteria": {"type": "array", "items": {"type": "string"}}}
+      }
+    }
+  }
+}

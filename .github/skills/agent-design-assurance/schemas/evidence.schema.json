@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "agent-design-assurance/evidence.schema.json",
+  "title": "Discovery evidence register",
+  "description": "Every material observation, with provenance. Descriptions are sanitised semantic summaries, not verbatim source.",
+  "type": "object",
+  "required": ["schema_version", "evidence"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {"type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$"},
+    "evidence": {"type": "array", "items": {"$ref": "#/$defs/evidence"}}
+  },
+  "$defs": {
+    "evidence": {
+      "type": "object",
+      "required": ["id", "criteria", "source_type", "classification", "perspective", "description", "environment", "discovered_at"],
+      "additionalProperties": false,
+      "properties": {
+        "id": {"type": "string", "pattern": "^EV-[A-Z0-9][A-Z0-9-]*$"},
+        "criteria": {"type": "array", "items": {"type": "string", "pattern": "^[A-Z]{2,4}-\\d{2,3}$"}},
+        "source_type": {
+          "enum": [
+            "source_code", "iac", "azd_config", "dependency_manifest", "configuration", "environment_definition",
+            "prompt", "agent_definition", "workflow_definition", "tool_definition", "data_schema", "search_index_schema",
+            "ingestion_pipeline", "test", "evaluation_framework", "evaluation_dataset", "evaluation_result", "ci_cd",
+            "deployment_script", "documentation", "adr", "code_comment", "git_history", "azure_resource_config",
+            "azure_policy", "azure_rbac", "telemetry_aggregate", "external_documentation", "briefing", "interview", "other"
+          ]
+        },
+        "classification": {"enum": ["observed", "documented", "inferred", "conflicting", "unknown", "not_applicable"]},
+        "perspective": {"enum": ["declared", "implemented", "deployed", "runtime", "briefing", "none"]},
+        "location": {
+          "type": ["object", "null"],
+          "additionalProperties": false,
+          "properties": {
+            "path": {"type": ["string", "null"], "pattern": "^(?![A-Za-z]:)(?!/)(?!\\\\).*$"},
+            "lines": {"type": ["string", "null"], "pattern": "^\\d+(-\\d+)?(,\\s*\\d+(-\\d+)?)*$"},
+            "config_path": {"type": ["string", "null"]},
+            "symbol": {"type": ["string", "null"]}
+          }
+        },
+        "repository_revision": {"type": ["string", "null"]},
+        "azure_resource": {
+          "type": ["object", "null"],
+          "additionalProperties": false,
+          "required": ["alias"],
+          "properties": {
+            "alias": {"type": "string", "pattern": "^AZ-[A-Z0-9-]+$"},
+            "type": {"type": ["string", "null"]},
+            "location": {"type": ["string", "null"]}
+          }
+        },
+        "environment": {"enum": ["development", "test", "acceptance", "production", "shared", "unknown", "not_applicable"]},
+        "description": {"type": "string", "minLength": 20},
+        "discovered_at": {"type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}(T\\d{2}:\\d{2}(:\\d{2})?(\\.\\d+)?(Z|[+-]\\d{2}:\\d{2})?)?$"},
+        "command_template": {"type": ["string", "null"]},
+        "limitations": {"type": ["string", "null"]},
+        "confirms_absence": {"type": "boolean"}
+      }
+    }
+  }
+}

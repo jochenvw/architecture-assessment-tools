@@ -1,0 +1,138 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "agent-design-assurance/assessment.schema.json",
+  "title": "Preliminary assessment",
+  "description": "Per-criterion preliminary assessment, constructive observations and open questions.",
+  "type": "object",
+  "required": ["schema_version", "profiles", "criteria", "observations", "open_questions"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {"type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$"},
+    "profiles": {"type": "array", "items": {"type": "string"}, "minItems": 1},
+    "criteria": {"type": "array", "items": {"$ref": "#/$defs/criterion"}},
+    "observations": {"type": "array", "items": {"$ref": "#/$defs/observation"}},
+    "open_questions": {"type": "array", "items": {"$ref": "#/$defs/question"}}
+  },
+  "$defs": {
+    "evidenceRefs": {"type": "array", "items": {"type": "string", "pattern": "^EV-[A-Z0-9][A-Z0-9-]*$"}, "uniqueItems": true},
+    "criterionRefs": {"type": "array", "items": {"type": "string", "pattern": "^[A-Z]{2,4}-\\d{2,3}$"}, "uniqueItems": true},
+    "domain": {"type": "string", "pattern": "^(0[1-9]|1[0-2])$"},
+    "confidence": {"enum": ["high", "medium", "low", "none"]},
+    "severity": {"enum": ["high", "medium", "low", "informational", "not_assessed"]},
+    "texts": {"type": "array", "items": {"type": "string", "minLength": 1}},
+    "criterion": {
+      "type": "object",
+      "required": [
+        "id", "domain", "title", "question", "source_profile", "applicability", "status", "maturity",
+        "confidence", "discovery_coverage", "evidence_refs", "discovery_attempts"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {"type": "string", "pattern": "^[A-Z]{2,4}-\\d{2,3}$"},
+        "domain": {"$ref": "#/$defs/domain"},
+        "title": {"type": "string", "minLength": 3},
+        "question": {"type": "string", "minLength": 3},
+        "source_profile": {"type": "string"},
+        "emphasis": {"enum": ["standard", "high", "critical"]},
+        "applicability": {"enum": ["applicable", "not_applicable"]},
+        "applicability_justification": {"type": ["string", "null"]},
+        "expected_baseline": {
+          "type": ["object", "null"],
+          "additionalProperties": false,
+          "properties": {
+            "statement": {"type": "string"},
+            "source": {"type": "string"},
+            "verified_policy": {"type": "boolean"}
+          }
+        },
+        "status": {"enum": ["observed", "documented", "inferred", "conflicting", "unknown", "not_applicable"]},
+        "current_implementation": {"type": ["string", "null"]},
+        "technical_details": {"type": ["string", "null"]},
+        "design_rationale": {
+          "type": ["object", "null"],
+          "additionalProperties": false,
+          "required": ["statement", "documented"],
+          "properties": {"statement": {"type": "string"}, "documented": {"type": "boolean"}}
+        },
+        "perspectives": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "declared": {"type": ["string", "null"]},
+            "implemented": {"type": ["string", "null"]},
+            "deployed": {"type": ["string", "null"]},
+            "runtime": {"type": ["string", "null"]}
+          }
+        },
+        "strengths": {"$ref": "#/$defs/texts"},
+        "potential_gaps": {"$ref": "#/$defs/texts"},
+        "constraints": {"$ref": "#/$defs/texts"},
+        "dependencies": {"$ref": "#/$defs/texts"},
+        "conflicting_evidence": {"$ref": "#/$defs/texts"},
+        "unknowns": {"$ref": "#/$defs/texts"},
+        "implications": {"$ref": "#/$defs/texts"},
+        "evidence_refs": {"$ref": "#/$defs/evidenceRefs"},
+        "validation_evidence_refs": {"$ref": "#/$defs/evidenceRefs"},
+        "absence_confirmed": {"type": "boolean"},
+        "assurance_level": {"enum": ["instructed", "evaluated", "enforced", "guaranteed_by_construction", "none", "unknown", "not_applicable"]},
+        "maturity": {"enum": ["0", "1", "2", "3", "4", "5", "U", "N/A"]},
+        "confidence": {"$ref": "#/$defs/confidence"},
+        "discovery_coverage": {"enum": ["complete", "partial", "attempted", "not_investigated"]},
+        "discovery_attempts": {"$ref": "#/$defs/texts"},
+        "risk_severity": {"$ref": "#/$defs/severity"},
+        "follow_up_questions": {"$ref": "#/$defs/texts"},
+        "improvement_opportunities": {"$ref": "#/$defs/texts"}
+      }
+    },
+    "observation": {
+      "type": "object",
+      "required": [
+        "id", "domain", "category", "nature", "observation", "existing_implementation", "implication",
+        "evidence_refs", "criteria", "confidence", "risk_severity", "validation_status"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {"type": "string", "pattern": "^OBS-\\d{3,}$"},
+        "domain": {"$ref": "#/$defs/domain"},
+        "category": {"enum": ["retain", "improve", "introduce", "reconsider", "investigate"]},
+        "nature": {"enum": ["strength", "potential_gap", "neutral"]},
+        "observation": {"type": "string", "minLength": 10},
+        "existing_implementation": {"type": "string"},
+        "implication": {"type": "string"},
+        "evidence_refs": {"$ref": "#/$defs/evidenceRefs"},
+        "criteria": {"$ref": "#/$defs/criterionRefs"},
+        "confidence": {"$ref": "#/$defs/confidence"},
+        "risk_severity": {"$ref": "#/$defs/severity"},
+        "improvement_options": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["option", "trade_offs"],
+            "additionalProperties": false,
+            "properties": {"option": {"type": "string"}, "trade_offs": {"type": "string"}}
+          }
+        },
+        "needs_clarification": {"type": ["string", "null"]},
+        "follow_up_question": {"type": ["string", "null"]},
+        "proposed_action": {"type": ["string", "null"]},
+        "owner": {"type": ["string", "null"]},
+        "target_date": {"type": ["string", "null"]},
+        "validation_status": {"enum": ["unvalidated", "validated_with_team", "disputed", "superseded"]}
+      }
+    },
+    "question": {
+      "type": "object",
+      "required": ["id", "priority", "audience", "question", "why_it_matters", "criteria", "evidence_refs"],
+      "additionalProperties": false,
+      "properties": {
+        "id": {"type": "string", "pattern": "^Q-\\d{3,}$"},
+        "priority": {"enum": ["P1", "P2", "P3"]},
+        "audience": {"enum": ["development_team", "business_owner", "platform_owner", "security_owner", "operations_owner", "data_owner"]},
+        "question": {"type": "string", "minLength": 10},
+        "why_it_matters": {"type": "string", "minLength": 10},
+        "criteria": {"$ref": "#/$defs/criterionRefs"},
+        "evidence_refs": {"$ref": "#/$defs/evidenceRefs"}
+      }
+    }
+  }
+}

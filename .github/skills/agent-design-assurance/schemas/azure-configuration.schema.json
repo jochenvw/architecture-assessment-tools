@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "agent-design-assurance/azure-configuration.schema.json",
+  "title": "Deployed Azure configuration (sanitised)",
+  "description": "Targeted, property-selected configuration collected read-only by `ada.py azure collect`. Names and IDs are replaced by stable aliases.",
+  "type": "object",
+  "required": ["schema_version", "collections", "resources", "attempts"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {"type": "string"},
+    "collections": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["environment", "subscription_alias", "resource_group_alias", "authorised_by", "collected_at"],
+        "additionalProperties": false,
+        "properties": {
+          "environment": {"type": "string"},
+          "subscription_alias": {"type": "string"},
+          "resource_group_alias": {"type": "string"},
+          "authorised_by": {"type": "string"},
+          "collected_at": {"type": "string"},
+          "telemetry": {"type": "boolean"}
+        }
+      }
+    },
+    "resources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["alias", "type", "environment", "properties"],
+        "additionalProperties": false,
+        "properties": {
+          "alias": {"type": "string", "pattern": "^AZ-[A-Z0-9-]+$"},
+          "type": {"type": "string"},
+          "kind": {"type": ["string", "null"]},
+          "location": {"type": ["string", "null"]},
+          "environment": {"type": "string"},
+          "resource_group_alias": {"type": ["string", "null"]},
+          "properties": {"type": "object"},
+          "evidence_ids": {"type": "array", "items": {"type": "string"}}
+        }
+      }
+    },
+    "attempts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["collector", "command_template", "outcome"],
+        "additionalProperties": false,
+        "properties": {
+          "collector": {"type": "string"},
+          "target": {"type": ["string", "null"]},
+          "command_template": {"type": "string"},
+          "outcome": {"enum": ["ok", "empty", "forbidden", "not_found", "not_authenticated", "extension_missing", "cli_missing", "timeout", "blocked_by_guard", "error"]},
+          "detail": {"type": ["string", "null"]}
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+"schema_version":"1.0.0",
+"collections":[
+{"environment":"test","subscription_alias":"AZ-SUB-1","resource_group_alias":"AZ-RG-1","authorised_by":"platform owner","collected_at":"2025-01-15T10:00:00Z","telemetry":false}
+],
+"resources":[
+{"alias":"AZ-FOUNDRY-1","type":"Microsoft.CognitiveServices/accounts","kind":"AIServices","location":"westeurope","environment":"test","resource_group_alias":"AZ-RG-1","properties":{"publicNetworkAccess":"Disabled","disableLocalAuth":true,"privateEndpointConnections":1},"evidence_ids":["EV-AZ-FOUNDRY-1"]},
+{"alias":"AZ-SEARCH-1","type":"Microsoft.Search/searchServices","kind":null,"location":"westeurope","environment":"test","resource_group_alias":"AZ-RG-1","properties":{"sku":"standard","publicNetworkAccess":"Enabled","privateEndpointConnections":0},"evidence_ids":["EV-AZ-SEARCH-1"]}
+],
+"attempts":[
+{"collector":"inventory","target":"AZ-RG-1","command_template":"az resource list --resource-group {resource_group} --subscription {subscription}","outcome":"ok"},
+{"collector":"rbac","target":"AZ-RG-1","command_template":"az role assignment list --resource-group {resource_group}","outcome":"forbidden","detail":"Reader role cannot list role assignments at this scope."}
+]
+}
