@@ -5,19 +5,25 @@ application design & architecture. Each skill is a self-contained
 `.github/skills/<name>/SKILL.md` (plus optional reference files) that Copilot loads on
 demand — no shared setup and no dependencies between skills.
 
+> **Use at your own risk.** These skills support, and do not replace, professional judgement. See
+> the [disclaimer](#disclaimer).
+
 ## Skills
 
 | Skill | Purpose | Source |
 |-------|---------|--------|
 | `cloud-solution-architect` | Azure-based GenAI / Foundry-centric solution architecture guidance. | [microsoft/skills](https://github.com/microsoft/skills/tree/main/.github/skills/cloud-solution-architect) |
 | `acquire-codebase-knowledge` | Systematically build and document an understanding of an unfamiliar codebase. | [github/awesome-copilot](https://github.com/github/awesome-copilot/tree/main/skills/acquire-codebase-knowledge) |
-| `cost-extrapolator` | Project production workload cost from a small measured PoC, benchmark, or token sample, with representativeness gating and confidence bands. | This repository |
-| `token-quota-planner` | Size production model capacity (TPM / RPM / concurrency) from measured Foundry / Azure OpenAI usage or telemetry, check it against current quota limits, and produce a defensible quota request pack. | This repository |
+| `cost-extrapolator` **(experimental)** | Project production workload cost from a small measured PoC, benchmark, or token sample, with representativeness gating and confidence bands. | This repository |
+| `token-quota-planner` **(experimental)** | Size production model capacity (TPM / RPM / concurrency) from measured Foundry / Azure OpenAI usage or telemetry, check it against current quota limits, and produce a defensible quota request pack. | This repository |
 | `design-thinking` | Facilitate the full Design Thinking process — a 9-method framework covering empathy-driven discovery, synthesis, ideation, prototyping, and production-scale iteration. | This repository |
 | `outcome-hypothesis` | Run lightweight evidence discovery, then draft and validate a testable outcome hypothesis: what result will change, for whom, by when, and the indicators that prove it. | This repository |
-| `poc-to-prod` | Turn a proof-of-concept GenAI application review into a polished, McKinsey-style PoC-to-production readiness report and matching PDF, steered by an engagement-notes file that sets emphasis and severity. | This repository |
+| `poc-to-prod` | Turn a proof-of-concept GenAI application review into a polished PoC-to-production readiness report and matching PDF, steered by an engagement-notes file that sets emphasis and severity. | This repository |
 | `foundry-estate-assessment` | Assess an Azure AI Foundry estate against a configurable standard using a bundled, resumable, offline-testable Python scanner (Azure CLI + stdlib only): deterministic inventory, evidence collection, PASS/FAIL/UNKNOWN rule evaluation, and migration-effort sizing. | This repository |
 | `agent-design-assurance` | Read-only, evidence-first discovery of an Azure agentic AI application (repository plus optional, explicitly authorised Azure configuration) across 12 domains, using composable generic, platform and workload profiles. Produces a sanitised, portable evidence package (architecture graph, execution flows, evidence, preliminary assessment, open questions) for independent design assurance review. | This repository |
+
+**Experimental** skills are early and may change or produce inaccurate figures. Validate their
+estimates independently before using them for budgets, quota requests or commitments.
 
 `design-thinking` and `outcome-hypothesis` are general-purpose: they ask you where to find
 context and where to save output rather than assuming any fixed folder structure.
@@ -80,6 +86,22 @@ description. Example:
 | `.github/instructions/` | VS Code | Scoped instructions (`*.instructions.md`) |
 | `.github/chatmodes/` | VS Code | Custom chat modes (`*.chatmode.md`) |
 | `plugin.json` | Copilot CLI | Plugin manifest |
+
+## Disclaimer
+
+These skills and their outputs are provided "as is", without warranty of any kind, and are used
+at your own risk.
+
+- **No assurance or certification.** Outputs are AI-assisted, preliminary and may be incomplete or
+  wrong. A skill reporting no issues, a passing check or a favourable estimate does **not** mean a
+  system is secure, compliant, well-architected, correctly sized or fit for production.
+- **No rights derived.** No rights, obligations, commitments, guarantees, approvals or
+  endorsements (by the authors, Microsoft or anyone else) can be derived from these skills or
+  their outputs. Cost and quota figures are estimates, not quotes or capacity reservations.
+- **Your responsibility.** Qualified people must review all outputs and make their own decisions.
+  You remain responsible for what you run, which data you expose and what you share.
+- **Not official.** This is a personal project, not a Microsoft product, and is not supported by
+  Microsoft.
 
 ## License
 

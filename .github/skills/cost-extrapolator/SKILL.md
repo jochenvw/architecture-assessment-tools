@@ -1,7 +1,7 @@
 ---
 name: cost-extrapolator
 description: >-
-  Use this skill when estimating production workload cost from a small measured PoC, benchmark,
+  Experimental: validate outputs independently. Use this skill when estimating production workload cost from a small measured PoC, benchmark,
   smoke test, billing sample, token sample, batch run, document-processing sample, API load test,
   or other measured unit-cost evidence. Use when the user wants to scale from measured sample volume
   to target production volume and needs assumptions, representativeness, confidence bands, one-time

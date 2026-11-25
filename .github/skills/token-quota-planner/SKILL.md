@@ -1,7 +1,7 @@
 ---
 name: token-quota-planner
 description: >-
-  Use this skill when estimating model token quota or capacity from measured Foundry usage, Azure
+  Experimental: validate outputs independently. Use this skill when estimating model token quota or capacity from measured Foundry usage, Azure
   OpenAI usage, OpenTelemetry GenAI traces, application telemetry, gateway logs, load tests, smoke
   tests, manual PoC token samples, or benchmark runs. Use when the user wants to request or justify
   TPM, RPM, concurrency, deployment, regional, or model quota for production load. Do not use for
