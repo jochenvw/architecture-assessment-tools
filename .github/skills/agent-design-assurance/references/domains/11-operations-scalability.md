@@ -26,6 +26,8 @@ Prefix `OS` · Separate **instrumentation configured** from **telemetry actually
 | OS-11 | Capacity planning and bottlenecks | Which dependency saturates first under higher load — only where evidence supports it. | Telemetry, configs |
 | OS-12 | Cost per business task | Cost per completed review/task (measured or estimated, labelled); main cost drivers. | Telemetry, pricing tiers |
 | OS-13 | Shift-left computation opportunities | Work done at execution time that could move to ingestion time (pre-extraction, pre-indexing). | Flows, code |
+| OS-14 | Retry behaviour under throttling | On 429/503: whether `Retry-After` is honoured, backoff with jitter, a bounded retry budget, circuit breaking, fallback deployment or model; SDK default retries stacked on custom retries. | Code, SDK config, telemetry (retry counts) |
+| OS-15 | Quota headroom and capacity alerting | Alert rules on token/request utilisation against quota (TPM/RPM, PTU); projected peak demand versus assigned quota; quota increases requested or granted before launch. | Alert rules, deployments, docs |
 
 ## Telemetry templates (aggregate only)
 
@@ -36,3 +38,5 @@ See `azure-discovery.md` → *Telemetry mode*. Templates return counts, rates an
 - Application Insights configured but no GenAI spans found in code → ask how model and tool calls are observed in production.
 - No token metrics → ask how cost per review is known.
 - Long-running reviews without checkpointing → ask what happens when a run fails at 80 %.
+- Custom retry loop around a model call with fixed or no delay, or retries stacked on SDK retries → ask how many attempts one throttled request can generate.
+- Quota visible in deployments but no alert rule on utilisation → ask how the team learns that quota is nearly exhausted.

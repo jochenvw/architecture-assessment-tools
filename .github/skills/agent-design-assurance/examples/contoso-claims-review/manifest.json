@@ -8,7 +8,7 @@
 {"id":"example-document-review","version":"0.1.0","kind":"workload","baseline_status":"briefing_unverified","title":"Example exhaustive document review workload (Contoso claims reviewer)"}
 ],
 "assessment_date":"2026-11-25",
-"repository":{"name":"APP-1","remote":null,"revision":"7a79d5beae9dddb04ac5334fb300a39d860c2c77","branch":"main","working_tree_clean":true,"working_tree_summary":"clean","languages":{"Python":2,"Bicep":1}},
+"repository":{"name":"APP-1","remote":null,"revision":"ad19c85862c8f1f8589a16b71d0c2052be738145","branch":"main","working_tree_clean":true,"working_tree_summary":"clean","languages":{"Python":2,"Bicep":1}},
 "discovery_modes":[
 "repository",
 "azure_configuration"
@@ -33,11 +33,11 @@
 "production environment (out of scope)"
 ],
 "external_documentation":[],
-"sanitisation":{"performed":true,"performed_at":"2026-11-25T13:52:05Z","tool":"ada.py sanitize + package scan","aliases_applied":1,"secrets_redacted":0,"allowlisted":0,"files_excluded":[],"manual_review_notes":[]},
+"sanitisation":{"performed":true,"performed_at":"2026-11-25T15:20:41Z","tool":"ada.py sanitize + package scan","aliases_applied":1,"secrets_redacted":0,"allowlisted":0,"files_excluded":[],"manual_review_notes":[]},
 "limitations":[
 "Synthetic example: all names, paths and values are fictional.",
 "Production not inspected; deployed evidence covers the test environment only.",
 "Role assignments could not be read."
 ],
-"integrity":{"baseline_status_hash":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855","repository_unchanged":true,"checked_at":"2026-11-25T13:52:06Z"}
+"integrity":{"baseline_status_hash":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855","repository_unchanged":true,"checked_at":"2026-11-25T15:20:42Z"}
 }

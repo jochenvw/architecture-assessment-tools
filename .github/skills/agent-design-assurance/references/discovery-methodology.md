@@ -93,6 +93,22 @@ Prefer semantic reading over keyword search. Use keyword search only to find can
 the code. Record **discovery attempts** (`discovery_attempts`) for anything left unknown: what you
 searched, where, and what you found.
 
+### 4.1 Named patterns to recognise
+
+These recurring AI-workload patterns are easy to miss under generic wording. When you see one,
+record it as evidence against the listed criteria, using the pattern name in the description.
+Describe what is there; do not recommend a fix.
+
+| Pattern | What it looks like | Record against |
+|---|---|---|
+| Token retry storm | Retries on 429 with no or fixed delay, unbounded attempts, or custom retries on top of SDK retries | OS-08, OS-14 |
+| `Retry-After` ignored | Throttling response header not read; delay computed independently | OS-14 |
+| Untracked behaviour drift | Prompts or instructions editable in production with no version, approval or run stamp | LT-03, LT-04, LT-14 |
+| Filename-as-version | Inputs or prompts identified only by name or path, not by content hash or version id | LT-07, LT-14 |
+| Prompt-as-instruction | Retrieved or user content placed in the prompt without separation from instructions | EG-11, SG-14 |
+| Over-broad identity | One identity reading a whole service or tenant when the use case needs a subset | SG-04, SG-16 |
+| Label loss | Source sensitivity labels not carried through retrieval to outputs | SG-08, SG-17 |
+
 ## 5. Order
 
 01 → 02 → 05 → 06 → 07 → 08 → 09 → 10 → 03 → 04 → 11 → 12 works well. Business context frames

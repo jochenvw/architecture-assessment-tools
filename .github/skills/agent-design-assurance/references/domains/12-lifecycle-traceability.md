@@ -27,9 +27,11 @@ Prefix `LT` · Everything that can change application behaviour must be versione
 | LT-11 | Operational vs business auditability | Retention and immutability of audit records vs telemetry. | Data model, retention config |
 | LT-12 | Historical review reconstruction | Ability to reconstruct a past review's inputs, versions, evidence and decisions. | Data model, docs |
 | LT-13 | Operational and business ownership | Named owners for platform, application, prompts, models, data, support. | Docs, CODEOWNERS |
+| LT-14 | Per-run lineage stamp | Whether every run records, together: code commit or release, prompt/instruction version, model and deployment, retrieval index version, and input content version (hash or version id — a filename is not a version). Note which elements are missing and where the stamp lives (trace attributes, run record). | Code, trace attributes, run data model |
 
 ## Signals → targeted questions
 
 - Prompts loaded at runtime from a database → ask how versions, approvals and regression tests are managed, and whether a business edit can change mandatory behaviour.
 - Output stores only the final text → ask how a disputed finding is traced to the evidence and model used.
 - Model deployment set to auto-upgrade → ask how silent behaviour changes are detected.
+- Inputs identified only by filename or path → ask how a re-uploaded document with the same name is distinguished from the original.

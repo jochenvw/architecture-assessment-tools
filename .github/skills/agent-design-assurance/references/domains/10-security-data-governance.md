@@ -29,9 +29,13 @@ Prefix `SG` · Reconstruct trust boundaries, identity flows and the data lifecyc
 | SG-13 | Isolation | Cross-environment, cross-user and cross-tenant isolation of data, state and indexes. | Code, IaC |
 | SG-14 | External endpoints and trust relationships | Third-party APIs, outbound calls, trust of external content. | Code, config |
 | SG-15 | Audit requirements and audit trail | Who did what, when; immutability; retention of audit data. | Data model, logs |
+| SG-16 | Identity permission breadth (blast radius) | Per workload/agent identity: the broadest data it can reach versus what the use case needs — e.g. a whole search service versus one index, tenant-wide Graph scopes (`Sites.Read.All`) versus `Sites.Selected`, resource-group or subscription scope. Record what a compromised or prompt-injected identity could read or change. | Role assignments, app permissions (declared), IaC, code |
+| SG-17 | Sensitivity label propagation | Whether source sensitivity labels or classifications (Microsoft Purview / Information Protection) are captured at ingestion, kept on chunks and index entries, used in retrieval, and applied to generated outputs (for example the highest source label). | Ingestion code, index schema, output model |
 
 ## Signals → targeted questions
 
 - Telemetry content recording enabled → ask which data classes reach Application Insights and who can read them.
 - Embeddings stored without deletion propagation → ask how deleted source documents are purged from derived stores.
 - Contributor role at resource-group scope for the app identity → ask why data-plane roles were not sufficient.
+- One identity with read access to every index or a tenant-wide Graph scope → ask which data the use case actually needs and whether sensitive sources are separated.
+- Labelled source documents but no label field in the index or output → ask how output classification is determined.

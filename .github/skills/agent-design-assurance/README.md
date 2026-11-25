@@ -93,7 +93,7 @@ not reachable.
 
 | Kind | Example | Adds |
 |---|---|---|
-| generic (required) | `azure-agent` | 12 domain catalogues (167 criteria) |
+| generic (required) | `azure-agent` | 12 domain catalogues (172 criteria) |
 | platform | `example-platform` | Customer platform standard criteria |
 | workload | `example-document-review` | Functional requirements, briefing claims to verify, metrics |
 
