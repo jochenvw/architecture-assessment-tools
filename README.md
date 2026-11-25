@@ -52,10 +52,17 @@ This repository ships a `plugin.json` manifest, so the Copilot CLI can install i
 copilot plugin install jochenvw/architecture-assessment-tools
 ```
 
-Manage it with `copilot plugin list`, `copilot plugin disable architecture-assessment-tools`,
-and `copilot plugin uninstall architecture-assessment-tools`. You can also enable it
-declaratively by adding `architecture-assessment-tools` to the `enabledPlugins` field of
+The plugin is named `aat` (architecture assessment tools), so its skills are grouped under one
+prefix when you type `/`: `/aat:agent-design-assurance`, `/aat:cost-extrapolator`,
+`/aat:token-quota-planner`, and so on.
+
+Manage it with `copilot plugin list`, `copilot plugin disable aat` and
+`copilot plugin uninstall aat`. You can also enable it declaratively by adding `aat` to the
+`enabledPlugins` field of
 `~/.copilot/settings.json` (user level) or `.github/copilot/settings.json` (repository level).
+
+If you installed it before the plugin was renamed to `aat`, uninstall the old
+`architecture-assessment-tools` plugin and install it again.
 
 ### npx installer
 
