@@ -79,6 +79,17 @@ skill, multiple **evidence adapters**, one shared engine (representativeness gat
 | "Edge cases / missing data" | `error-handling.md` |
 | "Show me worked examples" | `examples.md` |
 
+## Keep the caller informed
+
+The caller should never wonder what you are doing or why. Post a short update (1-3 lines, plain
+language) at each step:
+
+- **Before:** what you are about to do and why it matters for the result.
+- **After:** what you found, including gaps or surprises, and what happens next.
+- **On a pivot or blocker:** say so immediately, with the reason and the impact on the result.
+
+Make assumptions visible as you make them. Do not narrate every command; report progress.
+
 ## How to run this skill
 
 1. **Route the evidence** (`evidence-routing.md`) — Foundry usage, OTel telemetry, manual PoC, or a

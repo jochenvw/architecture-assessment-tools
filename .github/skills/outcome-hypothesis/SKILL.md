@@ -84,6 +84,17 @@ This skill makes no assumptions about where context lives or where output is sav
 
 ---
 
+## Keep the caller informed
+
+The caller should never wonder what you are doing or why. Post a short update (1-3 lines, plain
+language) at each step:
+
+- **Before:** what you are about to do and why it matters for the result.
+- **After:** what you found, including gaps or surprises, and what happens next.
+- **On a pivot or blocker:** say so immediately, with the reason and the impact on the result.
+
+Make assumptions visible as you make them. Do not narrate every command; report progress.
+
 ## Authoring Flow
 
 The skill operates in five phases. Do not skip phases. In each phase, be explicit with the

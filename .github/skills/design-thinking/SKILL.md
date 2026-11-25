@@ -25,6 +25,17 @@ This skill is standalone and makes no assumptions about where you store work.
 - Intentionally include diverse stakeholder/user voices; surface environmental constraints early.
 - Maintain responsible-AI principles: fairness, safety, privacy, inclusiveness, transparency, accountability.
 
+## Keep the caller informed
+
+The caller should never wonder what you are doing or why. Post a short update (1-3 lines, plain
+language) at each step:
+
+- **Before:** what you are about to do and why it matters for the result.
+- **After:** what you found, including gaps or surprises, and what happens next.
+- **On a pivot or blocker:** say so immediately, with the reason and the impact on the result.
+
+Make assumptions visible as you make them. Do not narrate every command; report progress.
+
 ## Router & Classification
 
 If the user declares a stage, route directly to that method capsule. If unclear, ask these 3 diagnostic questions:
