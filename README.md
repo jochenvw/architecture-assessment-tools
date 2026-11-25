@@ -56,7 +56,8 @@ The plugin is named `aztools`, so its skills are grouped under one
 prefix when you type `/`: `/aztools:agent-design-assurance`, `/aztools:cost-extrapolator`,
 `/aztools:token-quota-planner`, and so on.
 
-Manage it with `copilot plugin list`, `copilot plugin disable aztools` and
+Manage it with `copilot plugin list`, `copilot plugin update aztools` (pulls the latest from
+`main`), `copilot plugin disable aztools` and
 `copilot plugin uninstall aztools`. You can also enable it declaratively by adding `aztools`
 to the
 `enabledPlugins` field of
