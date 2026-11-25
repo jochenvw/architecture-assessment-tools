@@ -1,8 +1,0 @@
-# package.json "files" bypasses the root .gitignore; keep customer profiles and caches out of npm.
-__pycache__/
-*.pyc
-profiles/*.yaml
-profiles/*.yml
-!profiles/azure-agent.yaml
-design-assurance-output/
-*-design-assurance-*.zip

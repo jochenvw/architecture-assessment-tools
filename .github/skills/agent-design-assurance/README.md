@@ -102,7 +102,7 @@ replaced. Emphasis takes the maximum across profiles. See `references/profile-au
 
 **Customer profiles never live in this repository.** This repo is public. Keep customer platform
 and workload profiles outside it (for example in a private repo or local folder) and pass them by
-path. `.gitignore` and `.npmignore` exclude `profiles/*.yaml` as a backstop. Start from an example:
+path. `.gitignore` excludes `profiles/*.yaml` as a backstop. Start from an example:
 
 ```bash
 cp profiles/examples/example-platform.yaml ~/private-profiles/my-platform.yaml   # edit id, prefix, criteria

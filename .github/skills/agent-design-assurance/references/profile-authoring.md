@@ -13,7 +13,7 @@ code.
 | `workload` | Functional requirements for one application, plus briefing claims to verify | `examples/example-document-review.yaml` (fictional) |
 
 Customer profiles **never live in this repository**. Keep them outside it and pass them by path.
-`.gitignore` and `.npmignore` exclude `profiles/*.yaml` (except `azure-agent.yaml`) as a backstop.
+`.gitignore` excludes `profiles/*.yaml` (except `azure-agent.yaml`) as a backstop.
 
 ## 2. Selecting and combining
 
