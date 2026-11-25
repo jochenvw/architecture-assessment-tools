@@ -28,13 +28,19 @@ The full layout is in `references/output-package.md`. A synthetic, gate-clean ex
 | Git | Optional; enables revision capture and the repository-unchanged gate |
 | Azure CLI | Optional; only for Azure discovery, already logged in. Never installed by the skill |
 
-Install with the rest of the repository's skills (see the root `README.md`):
+Install (details and npm 12 notes in the root `README.md`):
 
 ```bash
-npx github:jochenvw/architecture-assessment-tools --local   # into .github/skills of your app repo
+copilot plugin install jochenvw/architecture-assessment-tools   # Copilot CLI: /aztools:agent-design-assurance
 ```
 
-Or copy this folder to `.github/skills/agent-design-assurance` (or `~/.copilot/skills/`).
+No Copilot CLI, or only this skill? Copy it with git:
+
+```bash
+git clone --depth 1 --filter=blob:none --sparse https://github.com/jochenvw/architecture-assessment-tools aztools-tmp
+git -C aztools-tmp sparse-checkout set .github/skills/agent-design-assurance
+# copy aztools-tmp/.github/skills/agent-design-assurance to .github/skills/ (or ~/.copilot/skills/)
+```
 
 ## 3. Invoke
 

@@ -41,8 +41,13 @@ profiles never live in this repository: keep them outside it and pass them by pa
 
 ## Install the skills elsewhere
 
-To use these skills in another project or globally, install them with the native Copilot CLI
-plugin mechanism or with the bundled `npx` installer.
+To use these skills in another project or globally, pick the first option that fits:
+
+| You use | Recommended | Needs |
+|---|---|---|
+| GitHub Copilot CLI | [Plugin](#github-copilot-cli-plugin) | Copilot CLI only |
+| VS Code, or only one skill | [Copy with git](#copy-with-git-no-npm) | Git only |
+| Either, and npm is allowed to fetch from GitHub | [npx installer](#npx-installer) | Node.js 18+ |
 
 ### GitHub Copilot CLI plugin
 
@@ -57,19 +62,40 @@ prefix when you type `/`: `/aztools:agent-design-assurance`, `/aztools:cost-extr
 `/aztools:token-quota-planner`, and so on.
 
 Manage it with `copilot plugin list`, `copilot plugin update aztools` (pulls the latest from
-`main`), `copilot plugin disable aztools` and
-`copilot plugin uninstall aztools`. You can also enable it declaratively by adding `aztools`
-to the
-`enabledPlugins` field of
+`main`), `copilot plugin disable aztools` and `copilot plugin uninstall aztools`. You can also
+enable it declaratively by adding `aztools` to the `enabledPlugins` field of
 `~/.copilot/settings.json` (user level) or `.github/copilot/settings.json` (repository level).
 
 If you installed it before the plugin was renamed to `aztools`, uninstall the old
 `architecture-assessment-tools` plugin and install it again.
 
+### Copy with git (no npm)
+
+Works anywhere Git works. Fetch one skill (or drop the `sparse-checkout` line for all of them):
+
+```bash
+git clone --depth 1 --filter=blob:none --sparse https://github.com/jochenvw/architecture-assessment-tools aztools-tmp
+git -C aztools-tmp sparse-checkout set .github/skills/agent-design-assurance
+```
+
+Copy `aztools-tmp/.github/skills/<skill>` into your project's `.github/skills/` (or
+`~/.copilot/skills/` for every project), then delete `aztools-tmp`. To update, repeat.
+
 ### npx installer
 
 The installer runs directly from the repository with `npx` — it does not need to be published
 to npm.
+
+> **npm 12 and locked-down npm.** npm 12 refuses git-hosted packages by default
+> (`EALLOWGIT`), and some corporate npm mirrors trigger `EALLOWREMOTE`. Allow them for this one
+> command only, without changing your npm configuration:
+>
+> ```bash
+> npx --allow-git=all --allow-remote=all github:jochenvw/architecture-assessment-tools --local
+> ```
+>
+> If your organisation's policy forbids that, use the [plugin](#github-copilot-cli-plugin) or
+> [copy with git](#copy-with-git-no-npm) instead.
 
 #### Global (available in every project)
 
