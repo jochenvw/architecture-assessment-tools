@@ -6,18 +6,20 @@ skill is a self-contained folder with a `SKILL.md` that Copilot loads when neede
 > **Use at your own risk.** Outputs support, and never replace, professional judgement. See the
 > [disclaimer](#disclaimer).
 
+<a id="skills"></a>
+
 ## Skills
 
 | Skill | What it does | Status |
 |---|---|---|
-| `agent-design-assurance` | Read-only discovery of an Azure agentic AI app (repo, plus Azure config and telemetry if allowed) across 12 domains. Produces a sanitised evidence package for independent review. | Preview |
-| `foundry-estate-assessment` | Inventories an Azure AI Foundry estate and checks it against a configurable standard, with migration-effort sizing. | Preview |
-| `token-quota-planner` | Sizes model capacity (TPM, RPM, concurrency) from measured usage and builds a quota request. | Experimental |
-| `cost-extrapolator` | Projects production cost from a small measured sample, with confidence bands. | Experimental |
-| `outcome-hypothesis` | Drafts and validates a testable outcome hypothesis with leading and lagging indicators. | Stable |
-| `design-thinking` | Facilitates the 9-method Design Thinking process, from discovery to iteration. | Stable |
-| `cloud-solution-architect` | Azure solution architecture guidance. From [microsoft/skills](https://github.com/microsoft/skills/tree/main/.github/skills/cloud-solution-architect). | Third-party |
-| `acquire-codebase-knowledge` | Maps and documents an unfamiliar codebase. From [github/awesome-copilot](https://github.com/github/awesome-copilot/tree/main/skills/acquire-codebase-knowledge). | Third-party |
+| <a id="agent-design-assurance"></a>`agent-design-assurance` | `/aztools:agent-design-assurance` | Read-only discovery of an Azure agentic AI app (repo, plus Azure config and telemetry if allowed) across 12 domains. Produces a sanitised evidence package for independent review. | Preview |
+| <a id="foundry-estate-assessment"></a>`foundry-estate-assessment` | `/aztools:foundry-estate-assessment` | Inventories an Azure AI Foundry estate and checks it against a configurable standard, with migration-effort sizing. | Preview |
+| <a id="token-quota-planner"></a>`token-quota-planner` | `/aztools:token-quota-planner` | Sizes model capacity (TPM, RPM, concurrency) from measured usage and builds a quota request. | Experimental |
+| <a id="cost-extrapolator"></a>`cost-extrapolator` | `/aztools:cost-extrapolator` | Projects production cost from a small measured sample, with confidence bands. | Experimental |
+| <a id="outcome-hypothesis"></a>`outcome-hypothesis` | `/aztools:outcome-hypothesis` | Drafts and validates a testable outcome hypothesis with leading and lagging indicators. | Stable |
+| <a id="design-thinking"></a>`design-thinking` | `/aztools:design-thinking` | Facilitates the 9-method Design Thinking process, from discovery to iteration. | Stable |
+| <a id="cloud-solution-architect"></a>`cloud-solution-architect` | `/aztools:cloud-solution-architect` | Azure solution architecture guidance. From [microsoft/skills](https://github.com/microsoft/skills/tree/main/.github/skills/cloud-solution-architect). | Third-party |
+| <a id="acquire-codebase-knowledge"></a>`acquire-codebase-knowledge` | `/aztools:acquire-codebase-knowledge` | Maps and documents an unfamiliar codebase. From [github/awesome-copilot](https://github.com/github/awesome-copilot/tree/main/skills/acquire-codebase-knowledge). | Third-party |
 
 **Stable:** in regular use. **Preview:** complete and tested, not yet proven on many real
 workloads. **Experimental:** early; validate every figure independently before using it for
